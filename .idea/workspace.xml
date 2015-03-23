@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7adb91c1-fe37-4fc1-80ef-9f52462fa59c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Sheme.iml" afterPath="$PROJECT_DIR$/Sheme.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Sheme.iws" />
@@ -69,6 +67,9 @@
     <FindUsagesManager>
       <setting name="OPEN_NEW_TAB" value="true" />
     </FindUsagesManager>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -489,12 +490,19 @@
       <option name="number" value="Default" />
       <updated>1427124551364</updated>
       <workItem from="1427124570975" duration="669000" />
-      <workItem from="1427128039751" duration="458000" />
+      <workItem from="1427128039751" duration="506000" />
     </task>
+    <task id="LOCAL-00001" summary="Testing connection">
+      <created>1427128543034</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1427128543034</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1127000" />
+    <option name="totallyTimeSpent" value="1175000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1366" height="744" extended-state="6" />
@@ -547,6 +555,8 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
+    <MESSAGE value="Testing connection" />
+    <option name="LAST_COMMIT_MESSAGE" value="Testing connection" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
