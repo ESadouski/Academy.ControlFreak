@@ -14,6 +14,14 @@
             <artifactId>jsr311-api</artifactId>
             <version>1.1.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.aerospike</groupId>
+            <artifactId>aerospike-client</artifactId>
+            <version>3.0.30</version>
+        </dependency>
     </dependencies>
+
+
 
 </project>
