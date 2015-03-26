@@ -1,5 +1,4 @@
-package com.adform.academy.data.runnable.schemaEntity;
-
+package com.adform.academy.data.entity;
 
 public class Scheme {
     private String group;

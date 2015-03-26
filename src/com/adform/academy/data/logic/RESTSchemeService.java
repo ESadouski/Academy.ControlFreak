@@ -1,4 +1,4 @@
-package com.adform.academy.data.runnable.rest;
+package com.adform.academy.data.logic;
 
 import javax.ws.rs.*;
 
