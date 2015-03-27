@@ -1,4 +1,4 @@
-package src.com.adform.academy.data.exception;
+package com.adform.academy.data.exception;
 
 
 public class DAOException extends Exception {

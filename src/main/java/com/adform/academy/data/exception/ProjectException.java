@@ -1,4 +1,4 @@
-package src.com.adform.academy.data.exception;
+package com.adform.academy.data.exception;
 
 /**
  * Created by litvin on 26.3.15.

@@ -1,6 +1,6 @@
-package src.com.adform.academy.data.DAO;
+package com.adform.academy.data.DAO;
 
-import src.com.adform.academy.data.exception.DAOException;
+import com.adform.academy.data.exception.DAOException;
 
 public class DAOFactory {
 
