@@ -1,5 +1,3 @@
-/**
- * Created by litvin on 27.3.15.
- */
+//empty class
 public class Test {
 }

@@ -1,7 +1,5 @@
 package com.adform.academy.data.DAO;
 
-import com.adform.academy.data.exception.DAOException;
-
 public class DAOFactory {
 
     private static DAOFactory instance = new DAOFactory();
@@ -13,12 +11,12 @@ public class DAOFactory {
     private DAOFactory() {
     }
 
-    public DAOClient getDAO(DAOClientType type) throws DAOException {
+    public DAOClient getDAO(DAOClientType type) throws DaoException {
         switch (type){
             case AE :
                 return DAOAerospikeClient.getInstance();
             default:
-                throw new DAOException("No such client");
+                throw new DaoException("No such client");
         }
 
     }

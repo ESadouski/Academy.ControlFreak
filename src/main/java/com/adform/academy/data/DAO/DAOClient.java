@@ -1,21 +1,21 @@
 package com.adform.academy.data.DAO;
 
-import com.adform.academy.data.entity.AbstractScheme;
+import com.adform.academy.data.entity.Scheme;
 
 import java.util.List;
 
 public interface DAOClient {
 
-    public void addScheme(AbstractScheme scheme);
+    public void addScheme(Scheme scheme);
 
-    public AbstractScheme getScheme(String group, String name, String version);
+    public Scheme getScheme(String group, String name, String version);
 
-    public AbstractScheme getScheme(String group, String name);
+    public Scheme getScheme(String group, String name);
 
-    public List<AbstractScheme> getGroupOfScheme(String groupName);
+    public List<Scheme> getGroupOfScheme(String groupName);
 
-    public void updateScheme(AbstractScheme scheme);
+    public void updateScheme(Scheme scheme);
 
-    public void deleteScheme(AbstractScheme scheme);
+    public void deleteScheme(Scheme scheme);
 
 }

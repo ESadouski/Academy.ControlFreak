@@ -1,11 +1,11 @@
 package com.adform.academy.data.entity;
 
-public abstract class AbstractScheme {
+public class Scheme {
 
     private String name;
     private double version;
 
-    public AbstractScheme(String name, double version) {
+    public Scheme(String name, double version) {
         this.name = name;
         this.version = version;
     }
