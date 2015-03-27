@@ -1,6 +1,8 @@
-package com.adform.academy.data.DAO;
+package com.adform.academy.DAO;
 
-import com.adform.academy.data.entity.Scheme;
+
+
+import com.adform.academy.entity.Scheme;
 import com.aerospike.client.AerospikeClient;
 
 import java.util.List;

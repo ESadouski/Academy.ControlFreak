@@ -1,9 +1,11 @@
-package com.adform.academy.data.runnable;
+package com.adform.academy.runnable;
 
-import com.adform.academy.data.DAO.DAOClient;
-import com.adform.academy.data.DAO.DAOClientType;
-import com.adform.academy.data.DAO.DAOFactory;
-import com.adform.academy.data.DAO.DaoException;
+
+
+import com.adform.academy.DAO.DAOClient;
+import com.adform.academy.DAO.DAOClientType;
+import com.adform.academy.DAO.DAOFactory;
+import com.adform.academy.DAO.DaoException;
 
 import javax.swing.*;
 

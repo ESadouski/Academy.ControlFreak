@@ -1,4 +1,4 @@
-package com.adform.academy.data.DAO;
+package com.adform.academy.DAO;
 
 public class DAOFactory {
 

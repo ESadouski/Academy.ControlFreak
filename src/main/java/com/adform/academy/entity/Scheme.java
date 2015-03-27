@@ -1,4 +1,4 @@
-package com.adform.academy.data.entity;
+package com.adform.academy.entity;
 
 public class Scheme {
 

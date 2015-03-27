@@ -1,4 +1,4 @@
-package com.adform.academy.data.logic;
+package com.adform.academy.logic;
 
 import javax.ws.rs.*;
 
@@ -11,30 +11,30 @@ public class RESTSchemeService {
     @GET
     @Produces("application/json")
     @Path("/{group}/{name}/{version}")
-    public String getSchemeByNameAndVersion(@PathParam("group") String groupName,
+    public String getSchemeByVersion(@PathParam("group") String groupName,
                                             @PathParam("name") String schemeName,
                                             @PathParam("version") Double version) {
-        return "TODO";
+        return "TODO-GetV";
     }
 
     @GET
     @Produces("application/json")
     @Path("/{group}/{name}/latest")
-    public String getLatestSchemeByName(@PathParam("group") String groupName,
+    public String getLatestScheme(@PathParam("group") String groupName,
                                         @PathParam("name") String schemeName) {
-        return "TODO";
+        return "TODO-Latest ";
     }
 
     @GET
     @Produces("application/json")
     @Path("/{group}/")
     public String getAllSchemesInGroup(@PathParam("group") String groupName) {
-        return "TODO";
+        return "TODO-GetGR";
     }
 
     @DELETE
     @Path("/{group}/{name}/{version}")
-    public void deleteSchemeByNameAndVersion(@PathParam("group") String groupName,
+    public void deleteScheme(@PathParam("group") String groupName,
                                              @PathParam("name") String schemeName,
                                              @PathParam("version") Double version) {
     }
@@ -42,9 +42,11 @@ public class RESTSchemeService {
     @PUT
     @Consumes("application/json")
     @Path("/{group}/{name}/{version}")
-    public void putSchemeByNameAndVersion(@PathParam("group") String groupName,
+    public void putScheme(@PathParam("group") String groupName,
                                           @PathParam("name") String schemeName,
                                           @PathParam("version") Double version) {
+
+
 
     }
 
