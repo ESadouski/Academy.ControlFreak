@@ -1,28 +1,27 @@
-package com.adform.academy.data.runnable.rest;
+package com.adform.academy.data.logic;
 
 import javax.ws.rs.*;
-
 
 @Path("v1/scheme")
 public class RESTSchemeService {
     public RESTSchemeService() {
+
     }
 
     @GET
     @Produces("application/json")
     @Path("/{group}/{name}/{version}")
     public String getSchemeByNameAndVersion(@PathParam("group") String groupName,
-                                          @PathParam("name") String schemeName,
-                                          @PathParam("version") Double version) {
+                                            @PathParam("name") String schemeName,
+                                            @PathParam("version") Double version) {
         return "TODO";
-
     }
 
     @GET
     @Produces("application/json")
     @Path("/{group}/{name}/latest")
     public String getLatestSchemeByName(@PathParam("group") String groupName,
-                                      @PathParam("name") String schemeName) {
+                                        @PathParam("name") String schemeName) {
         return "TODO";
     }
 
