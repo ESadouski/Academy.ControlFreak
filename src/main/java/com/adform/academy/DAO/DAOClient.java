@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface DAOClient {
 
-    public void addScheme(Scheme scheme);
+    public void addScheme(String group, Scheme scheme);
 
-    public Scheme getScheme(String group, String name, String version);
+    public Scheme getScheme(String group, String name, double version);
 
     public Scheme getScheme(String group, String name);
 
@@ -19,5 +19,7 @@ public interface DAOClient {
     public void updateScheme(Scheme scheme);
 
     public void deleteScheme(Scheme scheme);
+
+
 
 }

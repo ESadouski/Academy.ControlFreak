@@ -24,7 +24,7 @@ public class DAOAerospikeClient implements DAOClient {
     }
 
     @Override
-    public void addScheme(Scheme scheme) {
+    public void addScheme(String group, Scheme scheme) {
         String name = scheme.getName();
         double version = scheme.getVersion();
 
@@ -32,7 +32,7 @@ public class DAOAerospikeClient implements DAOClient {
     }
 
     @Override
-    public Scheme getScheme(String group, String name, String version) {
+    public Scheme getScheme(String group, String name,double version) {
         return null;
     }
 
@@ -55,4 +55,6 @@ public class DAOAerospikeClient implements DAOClient {
     public void deleteScheme(Scheme scheme) {
 
     }
+
+
 }

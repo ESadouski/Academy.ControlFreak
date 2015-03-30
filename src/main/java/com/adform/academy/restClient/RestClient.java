@@ -4,6 +4,7 @@ package com.adform.academy.restClient;
 
 import com.adform.academy.entity.Scheme;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
@@ -17,6 +18,7 @@ import org.apache.http.params.HttpParams;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.List;
 
 
@@ -32,23 +34,24 @@ public class RestClient {
 
     public Scheme getSchemeByVersion(String groupName, String schemeName, Double version) {
         String jsonLine = getJSONLineFromServer(groupName + "/" +  schemeName + "/" + version);
-        //TODO
-        return  null;
+        return  gson.fromJson(jsonLine, Scheme.class);
     }
 
 
     public Scheme getLatestScheme(String groupName, String schemeName) {
         String jsonLine = getJSONLineFromServer(groupName + "/" +  schemeName + "/latest" );
-        //TODO
-        return  null;
+
+        return   gson.fromJson(jsonLine, Scheme.class);
 
     }
 
 
     public List<Scheme> getAllSchemesInGroup(String groupName) {
         String jsonLine = getJSONLineFromServer(groupName);
-        //TODO
-        return  null;
+        Type listType = new TypeToken<List<Scheme>>()
+        {
+        }.getType();
+        return   gson.fromJson(jsonLine, listType);
 
     }
 
@@ -56,8 +59,6 @@ public class RestClient {
     public void deleteScheme(String groupName, String schemeName, Double version) {
         HttpDelete deleteRequest = new HttpDelete(homeUrl + groupName + "/" +  schemeName + "/" + version);
         try {
-            deleteRequest.addHeader("Content-Type", "application/json");
-
             client.execute(deleteRequest);
             deleteRequest.releaseConnection();
         } catch (IOException e) {
@@ -68,11 +69,12 @@ public class RestClient {
 
 
     public void putScheme(Scheme scheme, String groupName) {
+        String jsonScheme = gson.toJson(scheme);
 
-        HttpPut putRequest = new HttpPut(homeUrl + groupName + "/" +  scheme.getName() + "/" + scheme.getVersion());
+        HttpPut putRequest = new HttpPut(homeUrl +  "add/" + groupName +  "/" + jsonScheme);
         try {
             putRequest.addHeader("Content-Type", "application/json");
-            putRequest.setEntity(new StringEntity(gson.toJson(scheme)));
+            //putRequest.setEntity(new StringEntity(gson.toJson(scheme)));
             client.execute(putRequest);
             putRequest.releaseConnection();
         } catch (IOException e) {
