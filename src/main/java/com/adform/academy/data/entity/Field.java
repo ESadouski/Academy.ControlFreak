@@ -3,12 +3,10 @@ package com.adform.academy.data.entity;
 public class Field {
 
     private String name;
-    private String type;
     private String pattern;
 
-    public Field(String name, String type, String pattern) {
+    public Field(String name, String pattern) {
         this.name = name;
-        this.type = type;
         this.pattern = pattern;
     }
 
@@ -20,19 +18,31 @@ public class Field {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String getPattern() {
         return pattern;
     }
 
     public void setPattern(String pattern) {
         this.pattern = pattern;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Field)) return false;
+
+        Field field = (Field) o;
+
+        if (!name.equals(field.name)) return false;
+        if (!pattern.equals(field.pattern)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + pattern.hashCode();
+        return result;
     }
 }
