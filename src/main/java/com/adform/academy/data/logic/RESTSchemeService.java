@@ -1,9 +1,13 @@
 package com.adform.academy.data.logic;
 
-import com.adform.academy.DAO.*;
+
+import com.adform.academy.data.dao.DAOClient;
+import com.adform.academy.data.dao.DAOClientType;
+import com.adform.academy.data.dao.DAOFactory;
+import com.adform.academy.data.dao.DaoException;
 import com.adform.academy.data.entity.Scheme;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
 
 import javax.ws.rs.*;
 import java.util.List;
