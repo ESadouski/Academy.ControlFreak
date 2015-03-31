@@ -1,4 +1,4 @@
-package com.adform.academy.exception;
+package com.adform.academy.data.exception;
 
 public class ProjectException extends Exception {
 

@@ -1,4 +1,4 @@
-package com.adform.academy.DAO;
+package com.adform.academy.data.dao;
 
 public enum DAOClientType {
     AE

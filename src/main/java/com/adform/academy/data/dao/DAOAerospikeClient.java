@@ -1,8 +1,6 @@
-package com.adform.academy.DAO;
+package com.adform.academy.data.dao;
 
-
-
-import com.adform.academy.entity.Scheme;
+import com.adform.academy.data.entity.Scheme;
 import com.aerospike.client.AerospikeClient;
 
 import java.util.List;
@@ -24,7 +22,7 @@ public class DAOAerospikeClient implements DAOClient {
     }
 
     @Override
-    public void addScheme(String group, Scheme scheme) {
+    public void addScheme(Scheme scheme) {
         String name = scheme.getName();
         double version = scheme.getVersion();
 
@@ -32,7 +30,7 @@ public class DAOAerospikeClient implements DAOClient {
     }
 
     @Override
-    public Scheme getScheme(String group, String name,double version) {
+    public Scheme getScheme(String group, String name, String version) {
         return null;
     }
 
@@ -55,6 +53,4 @@ public class DAOAerospikeClient implements DAOClient {
     public void deleteScheme(Scheme scheme) {
 
     }
-
-
 }

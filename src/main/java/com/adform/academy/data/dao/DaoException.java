@@ -1,7 +1,7 @@
-package com.adform.academy.DAO;
+package com.adform.academy.data.dao;
 
 
-import com.adform.academy.exception.ProjectException;
+import com.adform.academy.data.exception.ProjectException;
 
 public class DaoException extends ProjectException {
 

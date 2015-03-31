@@ -1,12 +1,11 @@
-package com.adform.academy.logic;
+package com.adform.academy.data.logic;
 
 import com.adform.academy.DAO.*;
-import com.adform.academy.entity.Scheme;
+import com.adform.academy.data.entity.Scheme;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import javax.ws.rs.*;
-import java.lang.reflect.Type;
 import java.util.List;
 
 @Path("v1/scheme")

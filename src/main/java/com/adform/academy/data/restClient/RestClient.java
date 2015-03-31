@@ -1,8 +1,8 @@
-package com.adform.academy.restClient;
+package com.adform.academy.data.restClient;
 
 
 
-import com.adform.academy.entity.Scheme;
+import com.adform.academy.data.entity.Scheme;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.http.HttpResponse;
@@ -10,9 +10,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpParams;
 
 
 import java.io.BufferedReader;
