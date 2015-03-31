@@ -1,9 +1,11 @@
 package com.adform.academy.data.dao;
 
+import com.adform.academy.data.entity.Field;
 import com.adform.academy.data.entity.Scheme;
 import com.aerospike.client.AerospikeClient;
 import com.aerospike.client.Bin;
 import com.aerospike.client.Key;
+import com.aerospike.client.Record;
 import com.aerospike.client.policy.WritePolicy;
 
 import java.util.List;
@@ -37,11 +39,20 @@ public class DAOAerospikeClient implements DAOClient {
         Bin nameBin = new Bin("name", name);
         Bin versBin = new Bin("version", version);
 
+        for (Field fild : scheme.getFields()){
+            Bin fieldBin = new Bin(fild.getName(), fild.getPattern());
+            client.put(policy, key, fieldBin);
+        }
+
         client.put(policy, key, nameBin, versBin);
     }
 
     @Override
     public Scheme getScheme(String group, String name, double version) {
+        Key key = new Key(DBNAME, group, name + version);
+
+        Record record = client.get(policy, key);
+
         return null;
     }
 
