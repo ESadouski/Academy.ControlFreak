@@ -22,6 +22,7 @@ public class Main {
 
         clientAE.addScheme("New", schemeInput);
         Scheme schemeOutput = clientAE.getScheme("New", "new2", 1);
+        clientAE.getGroupOfScheme("New");
 
         System.out.println(schemeOutput.getField(0).getName() + schemeOutput.getField(0).getPattern());
 

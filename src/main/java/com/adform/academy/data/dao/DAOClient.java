@@ -1,8 +1,7 @@
 package com.adform.academy.data.dao;
 
+import com.adform.academy.data.entity.Group;
 import com.adform.academy.data.entity.Scheme;
-
-import java.util.List;
 
 public interface DAOClient {
 
@@ -12,7 +11,7 @@ public interface DAOClient {
 
     public Scheme getScheme(String group, String name);
 
-    public List<Scheme> getGroupOfScheme(String groupName);
+    public Group getGroupOfScheme(String groupName);
 
     public void updateScheme(Scheme scheme);
 

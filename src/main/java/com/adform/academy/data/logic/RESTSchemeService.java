@@ -5,12 +5,12 @@ import com.adform.academy.data.dao.DAOClient;
 import com.adform.academy.data.dao.DAOClientType;
 import com.adform.academy.data.dao.DAOFactory;
 import com.adform.academy.data.dao.DaoException;
+import com.adform.academy.data.entity.Group;
 import com.adform.academy.data.entity.Scheme;
 import com.google.gson.Gson;
 
 
 import javax.ws.rs.*;
-import java.util.List;
 
 @Path("v1/scheme")
 public class RESTSchemeService {
@@ -48,7 +48,7 @@ public class RESTSchemeService {
     @Produces("application/json")
     @Path("/{group}/")
     public String getAllSchemesInGroup(@PathParam("group") String groupName) {
-        List<Scheme> result = clientDB.getGroupOfScheme(groupName);
+        Group result = clientDB.getGroupOfScheme(groupName);
         return gson.toJson(result);
 
     }

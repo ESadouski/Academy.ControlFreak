@@ -2,10 +2,12 @@ package com.adform.academy.data.dao;
 
 import com.adform.academy.data.dao.util.AerospikeConfig;
 import com.adform.academy.data.entity.Field;
+import com.adform.academy.data.entity.Group;
 import com.adform.academy.data.entity.Scheme;
 import com.aerospike.client.*;
 import com.aerospike.client.policy.WritePolicy;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class DAOAerospikeClient implements DAOClient {
@@ -52,7 +54,6 @@ public class DAOAerospikeClient implements DAOClient {
             Key fieldKey = new Key(DBNAME, schemeName, fieldIndex);
             client.put(policy, fieldKey, fieldBinName, fieldBinPattern);
         }
-
     }
 
     @Override
@@ -70,19 +71,36 @@ public class DAOAerospikeClient implements DAOClient {
             Record fieldRecord = client.get(policy, fieldKey);
             fields[fieldIndex] = new Field(fieldRecord.getString("name"), fieldRecord.getString("pattern"));
         }
-
         return new Scheme(name, version, fields);
     }
 
     @Override
     public Scheme getScheme(String group, String name) {
-
         return null;
     }
 
     @Override
-    public List<Scheme> getGroupOfScheme(String groupName) {
-        return null;
+    public Group getGroupOfScheme(String groupName) {
+        List <Scheme> schemes = new LinkedList<>();
+
+            client.scanAll(null, DBNAME, groupName, new ScanCallback() {
+                @Override
+                public void scanCallback(Key key, Record record) throws AerospikeException {
+                    String schemeName = record.getString("name");
+                    Double schemeVersion = record.getDouble("version");
+                    int schemeFieldCount = record.getInt("fieldcount");
+
+                    Field[] fields = new Field[schemeFieldCount];
+
+                    for (int fieldIndex = 0; fieldIndex < schemeFieldCount; fieldIndex++) {
+                        Key fieldKey = new Key(DBNAME, schemeName, fieldIndex);
+                        Record fieldRecord = client.get(policy, fieldKey);
+                        fields[fieldIndex] = new Field(fieldRecord.getString("name"), fieldRecord.getString("pattern"));
+                    }
+                    schemes.add(new Scheme(schemeName, schemeVersion, fields));
+                }
+            });
+        return new Group(groupName, schemes);
     }
 
     @Override
@@ -92,6 +110,6 @@ public class DAOAerospikeClient implements DAOClient {
 
     @Override
     public void deleteScheme(Scheme scheme) {
-
+//         Key schemeKey = new Key(DBNAME, scheme.getName(), scheme);
     }
 }
