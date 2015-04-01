@@ -17,11 +17,13 @@ public class Main {
         DAOFactory factory = DAOFactory.getInstance();
         DAOClient clientAE = factory.getDAO(DAOClientType.AE);
 
-        Field[] fields = {new Field("fild", "[a-z]")};
-        Scheme scheme = new Scheme("new", 1.0, fields);
+        Field[] fields = {new Field("fild", "[a-b]")};
+        Scheme schemeInput = new Scheme("new2", 1, fields);
 
-        clientAE.addScheme("New", scheme);
-        clientAE.getScheme("New", "new", 1.0);
+        clientAE.addScheme("New", schemeInput);
+        Scheme schemeOutput = clientAE.getScheme("New", "new2", 1);
+
+        System.out.println(schemeOutput.getField(0).getName() + schemeOutput.getField(0).getPattern());
 
     }
 
