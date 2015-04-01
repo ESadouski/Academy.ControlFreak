@@ -18,7 +18,7 @@ public class RESTSchemeService {
     Gson gson;
 
     public RESTSchemeService() {
-        Gson gson = new Gson();
+        gson = new Gson();
         try {
             clientDB = DAOFactory.getInstance().getDAO(DAOClientType.AE);
         } catch (DaoException e) {
@@ -50,6 +50,7 @@ public class RESTSchemeService {
     public String getAllSchemesInGroup(@PathParam("group") String groupName) {
         List<Scheme> result = clientDB.getGroupOfScheme(groupName);
         return gson.toJson(result);
+
     }
 
     @DELETE
