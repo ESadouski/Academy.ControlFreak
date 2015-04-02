@@ -14,8 +14,8 @@ import javax.ws.rs.*;
 
 @Path("v1/scheme")
 public class RESTSchemeService {
-    DAOClient clientDB;
-    Gson gson;
+    private DAOClient clientDB;
+    private Gson gson;
 
     public RESTSchemeService() {
         gson = new Gson();
@@ -55,18 +55,24 @@ public class RESTSchemeService {
 
     @DELETE
     @Path("/{group}/{name}/{version}")
-    public void deleteScheme(@PathParam("group") String groupName,
+    public String deleteScheme(@PathParam("group") String groupName,
                              @PathParam("name") String schemeName,
                              @PathParam("version") Double version) {
         clientDB.deleteScheme(clientDB.getScheme(groupName, schemeName, version));
+
+//        TODO AddException and error code
+        return  null;
     }
 
     @PUT
     @Consumes("application/json")
     @Path("/add/{groupName}/{jsonScheme}")
-    public void putScheme(@PathParam("jsonScheme") String jsonScheme,
+    public String putScheme(@PathParam("jsonScheme") String jsonScheme,
                           @PathParam("groupName") String groupName) {
         clientDB.addScheme(groupName, gson.fromJson(jsonScheme, Scheme.class));
+
+//        TODO AddException and error code
+        return  null;
     }
 
 }

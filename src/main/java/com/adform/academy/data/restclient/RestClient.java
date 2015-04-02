@@ -1,9 +1,10 @@
-package com.adform.academy.data.restClient;
+package com.adform.academy.data.restclient;
 
 
 
 import com.adform.academy.data.entity.Group;
 import com.adform.academy.data.entity.Scheme;
+import com.adform.academy.data.restclient.restexeption.EmptyJSONException;
 import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;
@@ -17,27 +18,40 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
 
 
 public class RestClient {
-    String homeUrl = "http://localhost:8080/adf/";
-    HttpClient client;
-    Gson gson = new Gson();
+    private String homeUrl;
+    private HttpClient client;
+    private Gson gson = new Gson();
 
 
-    RestClient() {
+    RestClient(String url) {
         client = new DefaultHttpClient();
+        homeUrl = url;
     }
 
     public Scheme getSchemeByVersion(String groupName, String schemeName, Double version) {
-        String jsonLine = getJSONLineFromServer(groupName + "/" +  schemeName + "/" + version);
+
+        String jsonLine = null;
+        try {
+            jsonLine = getJSONLineFromServer(groupName + "/" +  schemeName + "/" + version);
+        } catch (EmptyJSONException e) {
+            e.printStackTrace();
+            //TODO: ADD Catching Exception on higer level
+        }
         return  gson.fromJson(jsonLine, Scheme.class);
     }
 
 
     public Scheme getLatestScheme(String groupName, String schemeName) {
-        String jsonLine = getJSONLineFromServer(groupName + "/" +  schemeName + "/latest" );
+        String jsonLine = null;
+        try {
+            jsonLine = getJSONLineFromServer(groupName + "/" +  schemeName + "/latest" );
+        } catch (EmptyJSONException e) {
+            e.printStackTrace();
+            //TODO: ADD Catching Exception on higer level
+        }
 
         return   gson.fromJson(jsonLine, Scheme.class);
 
@@ -45,7 +59,13 @@ public class RestClient {
 
 
     public Group getAllSchemesInGroup(String groupName) {
-        String jsonLine = getJSONLineFromServer(groupName);
+        String jsonLine = null;
+        try {
+            jsonLine = getJSONLineFromServer(groupName);
+        } catch (EmptyJSONException e) {
+            e.printStackTrace();
+            //TODO: ADD Catching Exception on higer level
+        }
         return gson.fromJson(jsonLine, Group.class);
 
     }
@@ -58,6 +78,7 @@ public class RestClient {
             deleteRequest.releaseConnection();
         } catch (IOException e) {
             e.printStackTrace();
+            //TODO: ADD Catching Exception on higer level
         }
 
     }
@@ -74,11 +95,12 @@ public class RestClient {
             putRequest.releaseConnection();
         } catch (IOException e) {
             e.printStackTrace();
+            //TODO: ADD Catching Exception on higer level
         }
 
     }
 
-    private String getJSONLineFromServer(String url){
+    private String getJSONLineFromServer(String url) throws EmptyJSONException {
         String line = "";
         HttpGet request = new HttpGet(homeUrl + url);
         HttpResponse response = null;
@@ -88,6 +110,11 @@ public class RestClient {
             line = rd.readLine();
         } catch (IOException e) {
             e.printStackTrace();
+            //TODO: ADD Catching Exception on higer level
+        }
+
+        if ("".equals(line)) {
+            throw new EmptyJSONException();
         }
         return line;
     }
