@@ -7,6 +7,6 @@ public class AerospikeConfig {
     public static final String HOST = "localhost";
     public static final int PORT = 3000;
 
-    public static final String DBNAME = "test";
+    public static final String DBNAME = "scheme";
     public static WritePolicy policy = new WritePolicy();
 }
