@@ -2,9 +2,10 @@ package com.adform.academy.data.restClient;
 
 
 
+import com.adform.academy.data.entity.Group;
 import com.adform.academy.data.entity.Scheme;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
@@ -16,7 +17,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.util.List;
 
 
@@ -44,12 +44,9 @@ public class RestClient {
     }
 
 
-    public List<Scheme> getAllSchemesInGroup(String groupName) {
+    public Group getAllSchemesInGroup(String groupName) {
         String jsonLine = getJSONLineFromServer(groupName);
-        Type listType = new TypeToken<List<Scheme>>()
-        {
-        }.getType();
-        return   gson.fromJson(jsonLine, listType);
+        return gson.fromJson(jsonLine, Group.class);
 
     }
 

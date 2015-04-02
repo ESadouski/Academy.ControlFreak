@@ -63,7 +63,6 @@ public class DAOAerospikeClient implements DAOClient {
         Record schemeRecord = client.get(policy, schemeKey);
 
         int schemeFieldCount = schemeRecord.getInt("fieldcount");
-//        TODO create exception
 
         Field[] fields = new Field[schemeFieldCount];
 
@@ -82,7 +81,7 @@ public class DAOAerospikeClient implements DAOClient {
 
     @Override
     public Group getGroupOfScheme(String groupName) {
-        List <Scheme> schema = new LinkedList<>();
+        List <Scheme> schemes = new LinkedList<>();
 
             client.scanAll(null, DBNAME, groupName, new ScanCallback() {
                 @Override
@@ -98,10 +97,10 @@ public class DAOAerospikeClient implements DAOClient {
                         Record fieldRecord = client.get(policy, fieldKey);
                         fields[fieldIndex] = new Field(fieldRecord.getString("name"), fieldRecord.getString("pattern"));
                     }
-                    schema.add(new Scheme(schemeName, schemeVersion, fields));
+                    schemes.add(new Scheme(schemeName, schemeVersion, fields));
                 }
             });
-        return new Group(groupName, schema);
+        return new Group(groupName, schemes);
     }
 
     @Override
@@ -111,6 +110,5 @@ public class DAOAerospikeClient implements DAOClient {
 
     @Override
     public void deleteScheme(Scheme scheme) {
-
     }
 }

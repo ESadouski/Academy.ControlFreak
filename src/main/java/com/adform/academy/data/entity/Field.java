@@ -28,14 +28,22 @@ public class Field {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Field)) return false;
-
-        Field field = (Field) o;
-
-        if (!name.equals(field.name)) return false;
-        if (!pattern.equals(field.pattern)) return false;
-
+        if (this == o) {
+            return true;
+        }
+        if (null == o) {
+            return false;
+        }
+        if (getClass() != o.getClass()) {
+            return false;
+        }
+        final Field field = (Field) o;
+        if (!name.equals(field.name)) {
+            return false;
+        }
+        if (!pattern.equals(field.pattern)) {
+            return false;
+        }
         return true;
     }
 
