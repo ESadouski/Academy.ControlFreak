@@ -81,7 +81,7 @@ public class DAOAerospikeClient implements DAOClient {
 
     @Override
     public Group getGroupOfScheme(String groupName) {
-        List <Scheme> schemes = new LinkedList<>();
+        final List <Scheme> schemes = new LinkedList<>();
 
             client.scanAll(null, DBNAME, groupName, new ScanCallback() {
                 @Override
