@@ -1,5 +1,7 @@
 package com.adform.academy.data.entity;
 
+import java.util.Arrays;
+
 public class Scheme {
 
     private String name;
@@ -38,5 +40,18 @@ public class Scheme {
 
     public void setFields(Field[] fields) {
         this.fields = fields;
+    }
+
+    @Override
+    public String toString() {
+        String fieldsLine = "";
+        for (Field oeField : fields){
+            fieldsLine += oeField.toString() + "\r\n";
+        }
+        return "Scheme\r\n" +
+                "name= " + name +
+                "\r\nversion=" + version +
+                "\r\nFields:\r\n" +
+                fieldsLine;
     }
 }

@@ -53,4 +53,9 @@ public class Field {
         result = 31 * result + pattern.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Field: " + "name= " + name + ", pattern= " + pattern;
+    }
 }
