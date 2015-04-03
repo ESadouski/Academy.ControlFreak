@@ -3,10 +3,10 @@ package com.adform.academy.data.entity;
 public class Scheme {
 
     private String name;
-    private double version;
+    private int version;
     private Field[] fields;
 
-    public Scheme(String name, double version, Field[] fields) {
+    public Scheme(String name, int version, Field[] fields) {
         this.name = name;
         this.version = version;
         this.fields = fields;
@@ -20,11 +20,11 @@ public class Scheme {
         this.name = name;
     }
 
-    public double getVersion() {
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(double version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 

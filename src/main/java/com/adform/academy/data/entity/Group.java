@@ -27,4 +27,12 @@ public class Group {
     public void setList(List<Scheme> list) {
         this.list = list;
     }
+
+    public void addScheme(Scheme scheme) {
+        list.add(scheme);
+    }
+
+    public Scheme returnScheme(int index) {
+        return list.get(index);
+    }
 }

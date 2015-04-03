@@ -10,7 +10,7 @@ import com.aerospike.client.policy.WritePolicy;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DAOAerospikeClient implements DAOClient {
+public class DaoAerospikeClient implements DAOClient {
 
     private static final String HOST = AerospikeConfig.HOST;
     private static final int PORT = AerospikeConfig.PORT;
@@ -18,14 +18,14 @@ public class DAOAerospikeClient implements DAOClient {
     private static final String DBNAME = AerospikeConfig.DBNAME;
     private static WritePolicy policy = AerospikeConfig.policy;
 
-    private static DAOAerospikeClient instance = new DAOAerospikeClient();
+    private static DaoAerospikeClient instance = new DaoAerospikeClient();
 
     private AerospikeClient client = new AerospikeClient(HOST, PORT);
 
-    private DAOAerospikeClient() {
+    private DaoAerospikeClient() {
     }
 
-    public static DAOAerospikeClient getInstance(){
+    public static DaoAerospikeClient getInstance(){
         return instance;
     }
 
@@ -57,7 +57,7 @@ public class DAOAerospikeClient implements DAOClient {
     }
 
     @Override
-    public Scheme getScheme(String group, String name, double version) {
+    public Scheme getScheme(String group, String name, int version) {
         Key schemeKey = new Key(DBNAME, group, name + version);
 
         Record schemeRecord = client.get(policy, schemeKey);
@@ -81,13 +81,13 @@ public class DAOAerospikeClient implements DAOClient {
 
     @Override
     public Group getGroupOfScheme(String groupName) {
-            final  List <Scheme> schemes = new LinkedList<>();
+            final  List <Scheme> schemes = new LinkedList<Scheme>();
 
             client.scanAll(null, DBNAME, groupName, new ScanCallback() {
                 @Override
                 public void scanCallback(Key key, Record record) throws AerospikeException {
                     String schemeName = record.getString("name");
-                    Double schemeVersion = record.getDouble("version");
+                    int schemeVersion = record.getInt("version");
                     int schemeFieldCount = record.getInt("fieldcount");
 
                     Field[] fields = new Field[schemeFieldCount];

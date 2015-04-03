@@ -7,7 +7,7 @@ public interface DAOClient {
 
     public void addScheme(String group, Scheme scheme);
 
-    public Scheme getScheme(String group, String name, double version);
+    public Scheme getScheme(String group, String name, int version);
 
     public Scheme getScheme(String group, String name);
 
