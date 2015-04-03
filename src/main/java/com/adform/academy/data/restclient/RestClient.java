@@ -1,9 +1,9 @@
 package com.adform.academy.data.restclient;
 
 
-
 import com.adform.academy.data.entity.Group;
 import com.adform.academy.data.entity.Scheme;
+import com.adform.academy.data.restclient.restexeption.ClientOperationException;
 import com.adform.academy.data.restclient.restexeption.EmptyJSONException;
 import com.google.gson.Gson;
 
@@ -31,86 +31,80 @@ public class RestClient {
         homeUrl = url;
     }
 
-    public Scheme getSchemeByVersion(String groupName, String schemeName, Double version) {
+    public Scheme getSchemeByVersion(String groupName, String schemeName, int version) throws ClientOperationException {
 
-        String jsonLine = null;
+        String jsonLine;
         try {
-            jsonLine = getJSONLineFromServer(groupName + "/" +  schemeName + "/" + version);
+            jsonLine = getJSONLineFromServer(groupName + "/" + schemeName + "/" + version);
         } catch (EmptyJSONException e) {
-            e.printStackTrace();
-            //TODO: ADD Catching Exception on higer level
+            throw new ClientOperationException(e.getMessage());
         }
-        return  gson.fromJson(jsonLine, Scheme.class);
+        return gson.fromJson(jsonLine, Scheme.class);
     }
 
 
-    public Scheme getLatestScheme(String groupName, String schemeName) {
-        String jsonLine = null;
+    public Scheme getLatestScheme(String groupName, String schemeName) throws ClientOperationException {
+        String jsonLine;
         try {
-            jsonLine = getJSONLineFromServer(groupName + "/" +  schemeName + "/latest" );
+            jsonLine = getJSONLineFromServer(groupName + "/" + schemeName + "/latest");
         } catch (EmptyJSONException e) {
-            e.printStackTrace();
-            //TODO: ADD Catching Exception on higer level
+            throw new ClientOperationException(e.getMessage());
         }
 
-        return   gson.fromJson(jsonLine, Scheme.class);
+        return gson.fromJson(jsonLine, Scheme.class);
 
     }
 
 
-    public Group getAllSchemesInGroup(String groupName) {
-        String jsonLine = null;
+    public Group getAllSchemesInGroup(String groupName) throws ClientOperationException {
+        String jsonLine;
         try {
             jsonLine = getJSONLineFromServer(groupName);
         } catch (EmptyJSONException e) {
-            e.printStackTrace();
-            //TODO: ADD Catching Exception on higer level
+            throw new ClientOperationException(e.getMessage());
         }
         return gson.fromJson(jsonLine, Group.class);
 
     }
 
 
-    public void deleteScheme(String groupName, String schemeName, Double version) {
-        HttpDelete deleteRequest = new HttpDelete(homeUrl + groupName + "/" +  schemeName + "/" + version);
+    public void deleteScheme(String groupName, String schemeName, int version) throws ClientOperationException {
+        HttpDelete deleteRequest = new HttpDelete(homeUrl + groupName + "/" + schemeName + "/" + version);
         try {
             client.execute(deleteRequest);
             deleteRequest.releaseConnection();
         } catch (IOException e) {
-            e.printStackTrace();
-            //TODO: ADD Catching Exception on higer level
+            throw new ClientOperationException(e.getMessage());
         }
 
     }
 
 
-    public void putScheme(Scheme scheme, String groupName) {
+    public void putScheme(Scheme scheme, String groupName) throws ClientOperationException {
         String jsonScheme = gson.toJson(scheme);
 
-        HttpPut putRequest = new HttpPut(homeUrl +  "add/" + groupName +  "/" + jsonScheme);
+        HttpPut putRequest = new HttpPut(homeUrl + "add/" + groupName + "/" + jsonScheme);
         try {
             putRequest.addHeader("Content-Type", "application/json");
             //putRequest.setEntity(new StringEntity(gson.toJson(scheme)));
             client.execute(putRequest);
             putRequest.releaseConnection();
         } catch (IOException e) {
-            e.printStackTrace();
-            //TODO: ADD Catching Exception on higer level
+            throw new ClientOperationException(e.getMessage());
         }
 
     }
 
-    private String getJSONLineFromServer(String url) throws EmptyJSONException {
-        String line = "";
+    private String getJSONLineFromServer(String url) throws EmptyJSONException, ClientOperationException {
+        String line;
         HttpGet request = new HttpGet(homeUrl + url);
-        HttpResponse response = null;
+        HttpResponse response;
         try {
             response = client.execute(request);
             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             line = rd.readLine();
         } catch (IOException e) {
-            e.printStackTrace();
-            //TODO: ADD Catching Exception on higer level
+            throw new ClientOperationException(e.getMessage());
         }
 
         if ("".equals(line)) {
