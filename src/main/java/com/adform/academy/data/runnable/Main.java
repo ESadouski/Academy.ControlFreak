@@ -18,6 +18,7 @@ public class Main {
 //        Scheme schemeInput = new Scheme("advertising", 1.0, fields);
 //
 //        clientAE.addScheme("click", schemeInput);
+        System.out.println("this is new branch dbclient");
         Scheme schemeOutput = clientAE.getScheme("click", "advertising", 1.0);
         clientAE.getGroupOfScheme("New");
 
