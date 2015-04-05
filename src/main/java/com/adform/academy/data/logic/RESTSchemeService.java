@@ -32,7 +32,7 @@ public class RESTSchemeService {
     @Path("/{group}/{name}/{version}")
     public String getSchemeByVersion(@PathParam("group") String groupName,
                                      @PathParam("name") String schemeName,
-                                     @PathParam("version") Double version) {
+                                     @PathParam("version") int version) {
         return gson.toJson(clientDB.getScheme(groupName, schemeName, version));
     }
 
@@ -57,7 +57,7 @@ public class RESTSchemeService {
     @Path("/{group}/{name}/{version}")
     public String deleteScheme(@PathParam("group") String groupName,
                              @PathParam("name") String schemeName,
-                             @PathParam("version") Double version) {
+                             @PathParam("version") int version) {
         clientDB.deleteScheme(clientDB.getScheme(groupName, schemeName, version));
 
 //        TODO AddException and error code
