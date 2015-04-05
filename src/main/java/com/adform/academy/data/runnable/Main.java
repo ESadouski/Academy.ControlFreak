@@ -18,7 +18,7 @@ public class Main {
 //        Scheme schemeInput = new Scheme("advertising", 1.0, fields);
 //
 //        clientAE.addScheme("click", schemeInput);
-        Scheme schemeOutput = clientAE.getScheme("click", "advertising", 1.0);
+        Scheme schemeOutput = clientAE.getScheme("click", "advertising", 1);
         clientAE.getGroupOfScheme("New");
 
         System.out.println("name : " + schemeOutput.getName() + "\nversion : " + schemeOutput.getVersion()+"\n");

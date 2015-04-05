@@ -1,9 +1,10 @@
+import junit.framework.Assert;
 
 public class Test {
 
     @org.junit.Test
-    public static void fun() {
-
+    public void fun() {
+        Assert.assertTrue(true);
     }
 
 }
