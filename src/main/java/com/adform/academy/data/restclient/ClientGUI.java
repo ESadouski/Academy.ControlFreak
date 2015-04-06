@@ -3,6 +3,8 @@ package com.adform.academy.data.restclient;
 import com.adform.academy.data.entity.Scheme;
 import com.adform.academy.data.restclient.restexeption.ClientOperationException;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -78,42 +80,49 @@ public class ClientGUI extends Application {
             Button getLatest = new Button("Get latest scheme");
             this.getChildren().addAll(get, delete, getLatest);
             this.setSpacing(5);
-            get.setOnAction(event -> {
-                Scheme res = null;
-                try {
-                    res = client.getSchemeByVersion(infoBox.groupField.getText(),
-                            infoBox.nameField.getText(),
-                            Integer.parseInt(infoBox.versionField.getText()));
-                    resultText.setText(res.toString());
-                } catch (ClientOperationException e) {
-                    resultText.setText(e.getMessage());
+            get.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    Scheme res = null;
+                    try {
+                        res = client.getSchemeByVersion(infoBox.groupField.getText(),
+                                infoBox.nameField.getText(),
+                                Integer.parseInt(infoBox.versionField.getText()));
+                        resultText.setText(res.toString());
+                    } catch (ClientOperationException e) {
+                        resultText.setText(e.getMessage());
+                    }
+
+                }
+            });
+
+            getLatest.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    try {
+                        Scheme res = client.getLatestScheme(infoBox.groupField.getText(), infoBox.nameField.getText());
+                        resultText.setText(res.toString());
+                    } catch (ClientOperationException e) {
+                        resultText.setText(e.getMessage());
+                    }
+
                 }
 
             });
 
-            getLatest.setOnAction(event -> {
-                        try {
-                            Scheme res = client.getLatestScheme(infoBox.groupField.getText(), infoBox.nameField.getText());
-                            resultText.setText(res.toString());
-                        } catch (ClientOperationException e) {
-                            resultText.setText(e.getMessage());
-                        }
-
+            delete.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    try {
+                        client.deleteScheme(infoBox.groupField.getText(),
+                                infoBox.nameField.getText(),
+                                Integer.parseInt(infoBox.versionField.getText()));
+                    } catch (ClientOperationException e) {
+                        resultText.setText(e.getMessage());
                     }
+                }
 
-            );
-
-            delete.setOnAction(event -> {
-                        try {
-                            client.deleteScheme(infoBox.groupField.getText(),
-                                    infoBox.nameField.getText(),
-                                    Integer.parseInt(infoBox.versionField.getText()));
-                        } catch (ClientOperationException e) {
-                            resultText.setText(e.getMessage());
-                        }
-                    }
-
-            );
+            });
 
         }
 
