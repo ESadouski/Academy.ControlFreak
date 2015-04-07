@@ -1,15 +1,27 @@
 package com.adform.academy.data.entity;
 
+import java.util.List;
+
 public class Scheme {
 
+    private String group;
     private String name;
-    private double version;
-    private Field[] fields;
+    private int version;
+    private List<Field> fields;
 
-    public Scheme(String name, double version, Field[] fields) {
+    public Scheme(String group, String name, int version, List fields) {
+        this.group = group;
         this.name = name;
         this.version = version;
         this.fields = fields;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 
     public String getName() {
@@ -20,23 +32,23 @@ public class Scheme {
         this.name = name;
     }
 
-    public double getVersion() {
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(double version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 
-    public Field[] getFields() {
+    public List getFields() {
         return fields;
     }
 
     public Field getField(int index) {
-        return fields[index];
+        return fields.get(index);
     }
 
-    public void setFields(Field[] fields) {
+    public void setFields(List<Field> fields) {
         this.fields = fields;
     }
 }

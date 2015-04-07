@@ -31,44 +31,42 @@ public class DAOAerospikeClient implements DAOClient {
 
     @Override
     public void addScheme(String group, Scheme scheme) {
-        String schemeGroup = null;
         String schemeName = null;
         double schemeVersion = 0.0;
-        int schemeFieldCount = 0;
+        String schemeGroup = null;
+//        int schemeFieldCount = 0;
 
         if (null != scheme.getName() && null != scheme.getFields() && null != group) {
-            schemeGroup = group;
             schemeName = scheme.getName();
             schemeVersion = scheme.getVersion();
-            schemeFieldCount = scheme.getFields().length;
+            schemeGroup = group;
+//            schemeFieldCount = scheme.getFields().length;
         }
-        //TODO add group
-        Key groupKey = new Key(DBNAME, "groups", schemeGroup);
-        client.exists(policy, groupKey);
-
-        Key schemeKey = new Key(DBNAME, "schema", schemeName + schemeVersion);
+        Key schemeKey = new Key(DBNAME, "SCHEMA", schemeName + schemeVersion);
 
         Bin nameBin = new Bin("name", schemeName);
         Bin versBin = new Bin("version", schemeVersion);
-        Bin countBin = new Bin("fieldcount", schemeFieldCount);
+//        Bin countBin = new Bin("fieldcount", schemeFieldCount);
         Bin groupBin = new Bin("group", schemeGroup);
+        Bin listBin = new Bin("fields", scheme.getFields());
 
-        client.put(policy, schemeKey, nameBin, versBin, countBin, groupBin);
+        client.put(policy, schemeKey, groupBin, nameBin, versBin, listBin);
 
-        for (int fieldIndex = 0; fieldIndex < schemeFieldCount; fieldIndex++) {
-            Bin fieldBinName = new Bin("name", scheme.getField(fieldIndex).getName());
-            Bin fieldBinPattern = new Bin("pattern", scheme.getField(fieldIndex).getPattern());
-            Bin schemeBin = new Bin("scheme", schemeGroup + "_" + schemeName + "_" +schemeVersion);
-            Key fieldKey = new Key(DBNAME, "fields", fieldIndex);
-            client.put(policy, fieldKey, fieldBinName, fieldBinPattern, schemeBin);
-        }
+//        for (int fieldIndex = 0; fieldIndex < schemeFieldCount; fieldIndex++) {
+//            Bin fieldBinName = new Bin("name", scheme.getField(fieldIndex).getName());
+//            Bin fieldBinPattern = new Bin("pattern", scheme.getField(fieldIndex).getPattern());
+//            Key fieldKey = new Key(DBNAME, schemeName, fieldIndex);
+//            client.put(policy, fieldKey, fieldBinName, fieldBinPattern);
+//        }
     }
 
     @Override
-    public Scheme getScheme(String group, String name, double version) {
+    public Scheme getScheme(String group, String name, int version) {
         Key schemeKey = new Key(DBNAME, group, name + version);
 
         Record schemeRecord = client.get(policy, schemeKey);
+
+        List test = (List)schemeRecord.getValue("fields");
 
         int schemeFieldCount = schemeRecord.getInt("fieldcount");
 
