@@ -8,6 +8,7 @@
     <artifactId>schema-server</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>SchemaServer</name>
+    <packaging>war</packaging>
 
     <properties>
         <scala.version>2.11.2</scala.version>
@@ -95,10 +96,9 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.1</version>
                 <configuration>
-                    <path>/target</path>
+                    <path>/test</path>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 

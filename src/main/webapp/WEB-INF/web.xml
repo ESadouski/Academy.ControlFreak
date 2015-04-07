@@ -8,7 +8,7 @@
 
     <display-name>WebRest</display-name>
     <servlet-mapping>
-        <servlet-name>resteasy-servlet</servlet-name>
+        <servlet-name>servletR</servlet-name>
         <url-pattern>/adf/*</url-pattern>
     </servlet-mapping>
 
@@ -31,7 +31,7 @@
     </listener>
 
     <servlet>
-        <servlet-name>resteasy-servlet</servlet-name>
+        <servlet-name>servletR</servlet-name>
         <servlet-class>
             org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
         </servlet-class>
