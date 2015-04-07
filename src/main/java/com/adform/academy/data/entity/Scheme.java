@@ -1,26 +1,26 @@
 package com.adform.academy.data.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Scheme {
+public class Scheme implements Serializable{
 
-    private String group;
+    private Group group;
     private String name;
     private int version;
     private List<Field> fields;
 
-    public Scheme(String group, String name, int version, List fields) {
+    public Scheme(Group group, String name, int version) {
         this.group = group;
         this.name = name;
         this.version = version;
-        this.fields = fields;
     }
 
-    public String getGroup() {
+    public Group getGroup() {
         return group;
     }
 
-    public void setGroup(String group) {
+    public void setGroup(Group group) {
         this.group = group;
     }
 

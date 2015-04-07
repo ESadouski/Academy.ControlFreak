@@ -5,13 +5,15 @@ import com.adform.academy.data.entity.Scheme;
 
 public interface DAOClient {
 
-    public void addScheme(String group, Scheme scheme);
+    public void addScheme(Scheme scheme);
 
     public Scheme getScheme(String group, String name, int version);
 
-    public Scheme getScheme(String group, String name);
+//    public Scheme getScheme(String group, String name);
 
     public Group getGroupOfScheme(String groupName);
+
+    public Group getGroupOfScheme(Scheme scheme);
 
     public void updateScheme(Scheme scheme);
 

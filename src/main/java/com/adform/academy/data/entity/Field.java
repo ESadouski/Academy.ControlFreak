@@ -1,6 +1,8 @@
 package com.adform.academy.data.entity;
 
-public class Field {
+import java.io.Serializable;
+
+public class Field implements Serializable{
 
     private String name;
     private String pattern;

@@ -5,25 +5,45 @@ import com.adform.academy.data.dao.DAOClientType;
 import com.adform.academy.data.dao.DAOFactory;
 import com.adform.academy.data.dao.DaoException;
 import com.adform.academy.data.entity.Field;
+import com.adform.academy.data.entity.Group;
 import com.adform.academy.data.entity.Scheme;
 
 import javax.swing.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws DaoException {
         DAOFactory factory = DAOFactory.getInstance();
         DAOClient clientAE = factory.getDAO(DAOClientType.AE);
 
-//        Field[] fields = {new Field("range", "[a-b]")};
-//        Scheme schemeInput = new Scheme("advertising", 1.0, fields);
-//
-//        clientAE.addScheme("click", schemeInput);
-        System.out.println("this is new branch dbclient");
-        Scheme schemeOutput = clientAE.getScheme("click", "advertising", 1.0);
-        clientAE.getGroupOfScheme("New");
+//        List<Field> fields = {new Field("range", "[a-b]")};
 
-        System.out.println("name : " + schemeOutput.getName() + "\nversion : " + schemeOutput.getVersion()+"\n");
-        System.out.println("Fields:\n" + schemeOutput.getField(0).getName() + schemeOutput.getField(0).getPattern());
+        Field field1 = new Field("range", "[a-b]");
+        Field field2 = new Field("tel", "[0-9]");
+        Field field3 = new Field("cost", "[0-9]");
+        List<Field> list = new LinkedList<>();
+        list.add(field1);
+        list.add(field2);
+        list.add(field3);
+
+        Scheme scheme = new Scheme(null, "click", 1);
+        scheme.setFields(list);
+
+        List<Scheme> schemes = new LinkedList<Scheme>();
+        schemes.add(schemes.size(), scheme);
+
+        Group group = new Group("advert1", schemes);
+
+        scheme.setGroup(group);
+
+        clientAE.addScheme(scheme);
+
+//        Scheme schemeOutput = clientAE.getScheme("click", "advertising", 1.0);
+//        clientAE.getGroupOfScheme("New");
+//
+//        System.out.println("name : " + schemeOutput.getName() + "\nversion : " + schemeOutput.getVersion()+"\n");
+//        System.out.println("Fields:\n" + schemeOutput.getField(0).getName() + schemeOutput.getField(0).getPattern());
 
     }
 

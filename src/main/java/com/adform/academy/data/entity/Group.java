@@ -1,8 +1,9 @@
 package com.adform.academy.data.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Group {
+public class Group implements Serializable{
 
     private String name;
     private List<Scheme> list;
@@ -26,5 +27,10 @@ public class Group {
 
     public void setList(List<Scheme> list) {
         this.list = list;
+    }
+
+    public void addScheme(Scheme scheme){
+        System.out.println();
+        list.add(list.size(), scheme);
     }
 }

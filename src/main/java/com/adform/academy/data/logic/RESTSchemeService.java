@@ -32,17 +32,17 @@ public class RESTSchemeService {
     @Path("/{group}/{name}/{version}")
     public String getSchemeByVersion(@PathParam("group") String groupName,
                                      @PathParam("name") String schemeName,
-                                     @PathParam("version") Double version) {
+                                     @PathParam("version") int version) {
         return gson.toJson(clientDB.getScheme(groupName, schemeName, version));
     }
-
-    @GET
-    @Produces("application/json")
-    @Path("/{group}/{name}/latest")
-    public String getLatestScheme(@PathParam("group") String groupName,
-                                  @PathParam("name") String schemeName) {
-        return gson.toJson(clientDB.getScheme(groupName, schemeName));
-    }
+//
+//    @GET
+//    @Produces("application/json")
+//    @Path("/{group}/{name}/latest")
+//    public String getLatestScheme(@PathParam("group") String groupName,
+//                                  @PathParam("name") String schemeName) {
+//        return gson.toJson(clientDB.getScheme(groupName, schemeName));
+//    }
 
     @GET
     @Produces("application/json")
@@ -57,16 +57,16 @@ public class RESTSchemeService {
     @Path("/{group}/{name}/{version}")
     public void deleteScheme(@PathParam("group") String groupName,
                              @PathParam("name") String schemeName,
-                             @PathParam("version") Double version) {
+                             @PathParam("version") int version) {
         clientDB.deleteScheme(clientDB.getScheme(groupName, schemeName, version));
     }
 
-    @PUT
-    @Consumes("application/json")
-    @Path("/add/{groupName}/{jsonScheme}")
-    public void putScheme(@PathParam("jsonScheme") String jsonScheme,
-                          @PathParam("groupName") String groupName) {
-        clientDB.addScheme(groupName, gson.fromJson(jsonScheme, Scheme.class));
-    }
+//    @PUT
+//    @Consumes("application/json")
+//    @Path("/add/{groupName}/{jsonScheme}")
+//    public void putScheme(@PathParam("jsonScheme") String jsonScheme,
+//                          @PathParam("groupName") String groupName) {
+//        clientDB.addScheme(groupName, gson.fromJson(jsonScheme, Scheme.class));
+//    }
 
 }

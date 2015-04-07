@@ -30,34 +30,26 @@ public class DAOAerospikeClient implements DAOClient {
     }
 
     @Override
-    public void addScheme(String group, Scheme scheme) {
+    public void addScheme(Scheme scheme) {
+        String schemeGroup = null;
         String schemeName = null;
         double schemeVersion = 0.0;
-        String schemeGroup = null;
-//        int schemeFieldCount = 0;
 
-        if (null != scheme.getName() && null != scheme.getFields() && null != group) {
+        if (null != scheme.getGroup() && null != scheme.getName() && null != scheme.getFields()) {
+            schemeGroup = scheme.getGroup().getName();
             schemeName = scheme.getName();
             schemeVersion = scheme.getVersion();
-            schemeGroup = group;
-//            schemeFieldCount = scheme.getFields().length;
         }
-        Key schemeKey = new Key(DBNAME, "SCHEMA", schemeName + schemeVersion);
+        Key schemeKey = new Key(DBNAME, "SCHEMA", schemeGroup + schemeName + schemeVersion);
 
+        Bin groupBin = new Bin("group", scheme.getGroup().getName());
         Bin nameBin = new Bin("name", schemeName);
         Bin versBin = new Bin("version", schemeVersion);
-//        Bin countBin = new Bin("fieldcount", schemeFieldCount);
-        Bin groupBin = new Bin("group", schemeGroup);
         Bin listBin = new Bin("fields", scheme.getFields());
 
         client.put(policy, schemeKey, groupBin, nameBin, versBin, listBin);
 
-//        for (int fieldIndex = 0; fieldIndex < schemeFieldCount; fieldIndex++) {
-//            Bin fieldBinName = new Bin("name", scheme.getField(fieldIndex).getName());
-//            Bin fieldBinPattern = new Bin("pattern", scheme.getField(fieldIndex).getPattern());
-//            Key fieldKey = new Key(DBNAME, schemeName, fieldIndex);
-//            client.put(policy, fieldKey, fieldBinName, fieldBinPattern);
-//        }
+        addSchemeToGroup(scheme);
     }
 
     @Override
@@ -77,11 +69,17 @@ public class DAOAerospikeClient implements DAOClient {
             Record fieldRecord = client.get(policy, fieldKey);
             fields[fieldIndex] = new Field(fieldRecord.getString("name"), fieldRecord.getString("pattern"));
         }
-        return new Scheme(name, version, fields);
+        return null;
     }
 
+//    @Override
+//    public Scheme getScheme(String group, String name) {
+//        return null;
+//    }
+
+
     @Override
-    public Scheme getScheme(String group, String name) {
+    public Group getGroupOfScheme(Scheme scheme) {
         return null;
     }
 
@@ -103,7 +101,7 @@ public class DAOAerospikeClient implements DAOClient {
                         Record fieldRecord = client.get(policy, fieldKey);
                         fields[fieldIndex] = new Field(fieldRecord.getString("name"), fieldRecord.getString("pattern"));
                     }
-                    schemes.add(new Scheme(schemeName, schemeVersion, fields));
+//                    schemes.add(new Scheme(schemeName, schemeVersion, fields));
                 }
             });
         return new Group(groupName, schemes);
@@ -115,5 +113,14 @@ public class DAOAerospikeClient implements DAOClient {
 
     @Override
     public void deleteScheme(Scheme scheme) {
+    }
+
+    private void addSchemeToGroup(Scheme scheme){
+        Key groupKey = new Key(DBNAME, "GROUPS", scheme.getGroup().getName());
+        Group group = scheme.getGroup();
+        group.addScheme(scheme);
+        Bin nameBin = new Bin("name", group.getName());
+        Bin schemaBin = new Bin("schema", group.getList());
+        client.put(policy, groupKey, nameBin, schemaBin);
     }
 }
