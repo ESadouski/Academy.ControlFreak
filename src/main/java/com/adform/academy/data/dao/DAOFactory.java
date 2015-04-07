@@ -14,7 +14,7 @@ public class DAOFactory {
     public DAOClient getDAO(DAOClientType type) throws DaoException {
         switch (type){
             case AE :
-                return new DaoAerospikeClient();
+                return DaoAerospikeClient.getInstance();
             default:
                 throw new DaoException("No such client");
         }

@@ -21,11 +21,11 @@ public class DaoAerospikeClient implements DAOClient {
     private static String dataBaseName;
     private static WritePolicy policy = new WritePolicy();
 
-    //private static DaoAerospikeClient instance = new DaoAerospikeClient();
+    private static DaoAerospikeClient instance;
 
     private AerospikeClient client = new AerospikeClient(host, port);
 
-    public DaoAerospikeClient() throws DaoException {
+    private DaoAerospikeClient() throws DaoException {
         Properties property = new Properties();
         try(FileInputStream fileInputStream = new FileInputStream(URI)) {
             property.load(fileInputStream);
@@ -37,9 +37,10 @@ public class DaoAerospikeClient implements DAOClient {
         }
     }
 
-//    public static DaoAerospikeClient getInstance(){
-//        return instance;
-//    }
+    public static DaoAerospikeClient getInstance() throws DaoException {
+        instance = new DaoAerospikeClient();
+        return instance;
+    }
 
     @Override
     public void addScheme(String group, Scheme scheme) {
@@ -93,7 +94,7 @@ public class DaoAerospikeClient implements DAOClient {
 
     @Override
     public Group getGroupOfScheme(String groupName) {
-            final  List <Scheme> schemes = new LinkedList<Scheme>();
+            final  List <Scheme> schemes = new LinkedList<>();
 
             client.scanAll(null, dataBaseName, groupName, new ScanCallback() {
                 @Override
