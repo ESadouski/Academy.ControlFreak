@@ -1,6 +1,7 @@
 package com.adform.academy.data.restclient;
 
 
+import com.adform.academy.data.entity.Field;
 import com.adform.academy.data.entity.Group;
 import com.adform.academy.data.entity.Scheme;
 import com.adform.academy.data.restclient.restexeption.ClientOperationException;
@@ -12,6 +13,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 
@@ -69,7 +71,7 @@ public class RestClient {
 
 
     public void deleteScheme(String groupName, String schemeName, int version) throws ClientOperationException {
-        HttpDelete deleteRequest = new HttpDelete(homeUrl + groupName + "/" + schemeName + "/" + version);
+        HttpDelete deleteRequest = new HttpDelete(homeUrl + "/" + groupName + "/" + schemeName + "/" + version);
         try {
             client.execute(deleteRequest);
             deleteRequest.releaseConnection();
@@ -83,10 +85,10 @@ public class RestClient {
     public void putScheme(Scheme scheme, String groupName) throws ClientOperationException {
         String jsonScheme = gson.toJson(scheme);
 
-        HttpPut putRequest = new HttpPut(homeUrl + "add/" + groupName + "/" + jsonScheme);
+        HttpPut putRequest = new HttpPut(homeUrl + "/" + groupName);
         try {
             putRequest.addHeader("Content-Type", "application/json");
-            //putRequest.setEntity(new StringEntity(gson.toJson(scheme)));
+            putRequest.setEntity(new StringEntity(gson.toJson(scheme)));
             client.execute(putRequest);
             putRequest.releaseConnection();
         } catch (IOException e) {
@@ -97,7 +99,7 @@ public class RestClient {
 
     private String getJSONLineFromServer(String url) throws EmptyJSONException, ClientOperationException {
         String line;
-        HttpGet request = new HttpGet(homeUrl + url);
+        HttpGet request = new HttpGet(homeUrl + "/" + url);
         HttpResponse response;
         try {
             response = client.execute(request);
@@ -112,6 +114,8 @@ public class RestClient {
         }
         return line;
     }
+
+
 
 
 }

@@ -12,6 +12,7 @@ import org.jboss.resteasy.plugins.server.tjws.TJWSEmbeddedJaxrsServer;
 
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 
 @Path("/v1/scheme")
 public class RESTSchemeService {
@@ -64,28 +65,28 @@ public class RESTSchemeService {
     @DELETE
     @Path("/{group}/{name}/{version}")
     public String deleteScheme(@PathParam("group") String groupName,
-                             @PathParam("name") String schemeName,
-                             @PathParam("version") int version) {
+                               @PathParam("name") String schemeName,
+                               @PathParam("version") int version) {
         clientDB.deleteScheme(clientDB.getScheme(groupName, schemeName, version));
 
 //        TODO AddException and error code
-        return  null;
+        return null;
     }
 
     @PUT
-    @Consumes("application/json")
-    @Path("/add/{groupName}/{jsonScheme}")
-    public String putScheme(@PathParam("jsonScheme") String jsonScheme,
-                          @PathParam("groupName") String groupName) {
-        clientDB.addScheme(groupName, gson.fromJson(jsonScheme, Scheme.class));
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/{group}")
+    public String putScheme(@PathParam("group") String groupName, String jsonScheme) {
+        System.out.println("PUT <" + jsonScheme + ">");
+
+        //clientDB.addScheme(groupName, gson.fromJson(jsonScheme, Scheme.class));
 
 //        TODO AddException and error code
-        return  null;
+        return null;
     }
 
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         //Path for tests localhost8081/v1/scheme
         TJWSEmbeddedJaxrsServer tjws = new TJWSEmbeddedJaxrsServer();
         tjws.setPort(8081);
