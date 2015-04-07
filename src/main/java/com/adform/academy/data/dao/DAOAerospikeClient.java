@@ -33,7 +33,7 @@ public class DAOAerospikeClient implements DAOClient {
     public void addScheme(Scheme scheme) {
         String schemeGroup = null;
         String schemeName = null;
-        double schemeVersion = 0.0;
+        int schemeVersion = 0;
 
         if (null != scheme.getGroup() && null != scheme.getName() && null != scheme.getFields()) {
             schemeGroup = scheme.getGroup().getName();
@@ -42,7 +42,7 @@ public class DAOAerospikeClient implements DAOClient {
         }
         Key schemeKey = new Key(DBNAME, "SCHEMA", schemeGroup + schemeName + schemeVersion);
 
-        Bin groupBin = new Bin("group", scheme.getGroup().getName());
+        Bin groupBin = new Bin("group", scheme.getGroup());
         Bin nameBin = new Bin("name", schemeName);
         Bin versBin = new Bin("version", schemeVersion);
         Bin listBin = new Bin("fields", scheme.getFields());
@@ -53,23 +53,26 @@ public class DAOAerospikeClient implements DAOClient {
     }
 
     @Override
-    public Scheme getScheme(String group, String name, int version) {
-        Key schemeKey = new Key(DBNAME, group, name + version);
+    public Scheme getScheme(String groupName, String name, int version) {
+        Key schemeKey = new Key(DBNAME, "SCHEMA", groupName + name + version);
 
         Record schemeRecord = client.get(policy, schemeKey);
 
-        List test = (List)schemeRecord.getValue("fields");
+        String adad = schemeRecord.getString("name");
+        Group group = (Group) schemeRecord.getValue("group");
+        List<Field> fields = (List) schemeRecord.getValue("fields");
 
-        int schemeFieldCount = schemeRecord.getInt("fieldcount");
 
-        Field[] fields = new Field[schemeFieldCount];
-
-        for (int fieldIndex = 0; fieldIndex < schemeFieldCount; fieldIndex++) {
-            Key fieldKey = new Key(DBNAME, name, fieldIndex);
-            Record fieldRecord = client.get(policy, fieldKey);
-            fields[fieldIndex] = new Field(fieldRecord.getString("name"), fieldRecord.getString("pattern"));
-        }
-        return null;
+//        int schemeFieldCount = schemeRecord.getInt("fieldcount");
+//
+//        Field[] fields = new Field[schemeFieldCount];
+//
+//        for (int fieldIndex = 0; fieldIndex < schemeFieldCount; fieldIndex++) {
+//            Key fieldKey = new Key(DBNAME, name, fieldIndex);
+//            Record fieldRecord = client.get(policy, fieldKey);
+//            fields[fieldIndex] = new Field(fieldRecord.getString("name"), fieldRecord.getString("pattern"));
+//        }
+        return new Scheme(group, name, version, fields);
     }
 
 //    @Override

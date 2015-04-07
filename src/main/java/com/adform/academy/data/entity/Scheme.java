@@ -16,6 +16,13 @@ public class Scheme implements Serializable{
         this.version = version;
     }
 
+    public Scheme(Group group, String name, int version, List<Field> fields) {
+        this.group = group;
+        this.name = name;
+        this.version = version;
+        this.fields = fields;
+    }
+
     public Group getGroup() {
         return group;
     }

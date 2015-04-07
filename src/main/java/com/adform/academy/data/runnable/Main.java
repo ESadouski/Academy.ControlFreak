@@ -33,11 +33,14 @@ public class Main {
         List<Scheme> schemes = new LinkedList<Scheme>();
         schemes.add(schemes.size(), scheme);
 
-        Group group = new Group("advert1", schemes);
+        Group group = new Group("advert", schemes);
 
         scheme.setGroup(group);
 
         clientAE.addScheme(scheme);
+
+        Scheme schemeOut = clientAE.getScheme("advert", "click", 1);
+        System.out.println("all right");
 
 //        Scheme schemeOutput = clientAE.getScheme("click", "advertising", 1.0);
 //        clientAE.getGroupOfScheme("New");
