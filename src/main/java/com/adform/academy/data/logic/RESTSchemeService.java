@@ -8,11 +8,12 @@ import com.adform.academy.data.dao.DaoException;
 import com.adform.academy.data.entity.Group;
 import com.adform.academy.data.entity.Scheme;
 import com.google.gson.Gson;
+import org.jboss.resteasy.plugins.server.tjws.TJWSEmbeddedJaxrsServer;
 
 
 import javax.ws.rs.*;
 
-@Path("v1/scheme")
+@Path("/v1/scheme")
 public class RESTSchemeService {
     private DAOClient clientDB;
     private Gson gson;
@@ -25,6 +26,13 @@ public class RESTSchemeService {
             e.printStackTrace();
         }
 
+    }
+
+
+    @GET
+    @Path("/status")
+    public String testConnection() {
+        return "Server is running";
     }
 
     @GET
@@ -73,6 +81,16 @@ public class RESTSchemeService {
 
 //        TODO AddException and error code
         return  null;
+    }
+
+
+    public static void main(String[] args) throws Exception
+    {
+        //Path for tests localhost8081/v1/scheme
+        TJWSEmbeddedJaxrsServer tjws = new TJWSEmbeddedJaxrsServer();
+        tjws.setPort(8081);
+        tjws.getDeployment().getActualResourceClasses().add(RESTSchemeService.class);
+        tjws.start();
     }
 
 }

@@ -18,9 +18,9 @@ import javafx.stage.Stage;
 
 
 public class ClientGUI extends Application {
-    RestClient client;
-    final SchemaInfoFields infoBox = new SchemaInfoFields();
-    TextArea resultText;
+    private RestClient client;
+    private  final SchemaInfoFields infoBox = new SchemaInfoFields();
+    private  TextArea resultText;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
