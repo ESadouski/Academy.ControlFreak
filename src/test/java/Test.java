@@ -1,10 +1,10 @@
-import junit.framework.Assert;
+import org.junit.Assert;
 
 public class Test {
 
     @org.junit.Test
     public void fun() {
-        Assert.assertTrue(true);
+        Assert.assertEquals(25,25,5);
     }
 
 }
