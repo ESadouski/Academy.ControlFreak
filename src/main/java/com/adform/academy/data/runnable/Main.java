@@ -26,7 +26,7 @@ public class Main {
         list.add(field2);
         list.add(field3);
 
-        Scheme scheme = new Scheme("advert4", "click2345", 1);
+        Scheme scheme = new Scheme("advert4", "click23456", 1);
         scheme.setFields(list);
 
         List<Scheme> schemes = new LinkedList<Scheme>();
@@ -36,11 +36,11 @@ public class Main {
 
 //        scheme.setGroup(group.getName());
 //
-        Group group = clientAE.getGroupOfScheme("advert4");
+//        Group group = clientAE.getGroupOfScheme("advert4");
         clientAE.addScheme(scheme);
 
         Group group1 = clientAE.getGroupOfScheme("advert4");
-        clientAE.deleteScheme(scheme);
+//        clientAE.deleteScheme(scheme);
 
 //        Scheme schemeOut = clientAE.getScheme("advert4", "click23", 1);
         ;

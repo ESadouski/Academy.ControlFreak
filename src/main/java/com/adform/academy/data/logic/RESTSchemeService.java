@@ -32,7 +32,7 @@ public class RESTSchemeService {
     @Path("/{group}/{name}/{version}")
     public String getSchemeByVersion(@PathParam("group") String groupName,
                                      @PathParam("name") String schemeName,
-                                     @PathParam("version") int version) {
+                                     @PathParam("version") int version) throws DaoException{
         return gson.toJson(clientDB.getScheme(groupName, schemeName, version));
     }
 //
@@ -47,7 +47,7 @@ public class RESTSchemeService {
     @GET
     @Produces("application/json")
     @Path("/{group}/")
-    public String getAllSchemesInGroup(@PathParam("group") String groupName) {
+    public String getAllSchemesInGroup(@PathParam("group") String groupName) throws DaoException{
         Group result = clientDB.getGroupOfScheme(groupName);
         return gson.toJson(result);
 
@@ -57,7 +57,7 @@ public class RESTSchemeService {
     @Path("/{group}/{name}/{version}")
     public void deleteScheme(@PathParam("group") String groupName,
                              @PathParam("name") String schemeName,
-                             @PathParam("version") int version) {
+                             @PathParam("version") int version) throws DaoException{
         clientDB.deleteScheme(clientDB.getScheme(groupName, schemeName, version));
     }
 

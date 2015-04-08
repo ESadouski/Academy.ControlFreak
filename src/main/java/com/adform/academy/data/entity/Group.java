@@ -3,7 +3,7 @@ package com.adform.academy.data.entity;
 import java.io.Serializable;
 import java.util.List;
 
-public class Group implements Serializable{
+public class Group {
 
     private String name;
     private List<Scheme> list;

@@ -5,15 +5,11 @@ import com.adform.academy.data.entity.Scheme;
 
 public interface DAOClient {
 
-    public void addScheme(Scheme scheme);
+    public void addScheme(Scheme scheme) throws DaoException;
 
-    public Scheme getScheme(String group, String name, int version);
+    public Scheme getScheme(String group, String name, int version) throws DaoException;
 
-//    public Scheme getScheme(String group, String name);
-
-    public Group getGroupOfScheme(String groupName);
-
-    public Group getGroupOfScheme(Scheme scheme);
+    public Group getGroupOfScheme(String groupName) throws DaoException;
 
     public void deleteScheme(Scheme scheme);
 

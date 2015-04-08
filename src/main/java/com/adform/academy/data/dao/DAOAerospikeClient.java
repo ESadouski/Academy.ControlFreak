@@ -31,83 +31,66 @@ public class DAOAerospikeClient implements DAOClient {
     }
 
     @Override
-    public void addScheme(Scheme scheme) {
-        String schemeGroup = null;
-        String schemeName = null;
-        int schemeVersion = 0;
-
-        if (null != scheme.getGroup() && null != scheme.getName() && null != scheme.getFields()) {
-            schemeGroup = scheme.getGroup();
-            schemeName = scheme.getName();
-            schemeVersion = scheme.getVersion();
+    public void addScheme(Scheme scheme) throws DaoException {
+        if (null == scheme.getGroup() && null == scheme.getName() && 0 == scheme.getVersion() && null == scheme.getFields()) {
+            throw new DaoException("Empty scheme");
         }
-        Key schemeKey = new Key(DBNAME, "SCHEMA", schemeGroup + schemeName + schemeVersion);
+        else {
+            String schemeGroup = scheme.getGroup();
+            String schemeName = scheme.getName();
+            int schemeVersion = scheme.getVersion();
 
-        Bin groupBin = new Bin("group", scheme.getGroup());
-        Bin nameBin = new Bin("name", schemeName);
-        Bin versBin = new Bin("version", schemeVersion);
-        Bin fieldsBin = new Bin("fields", scheme.getFields());
+            Key schemeKey = new Key(DBNAME, "SCHEMA", schemeGroup + schemeName + schemeVersion);
 
-        addSchemeToGroup(scheme);
-        client.put(policy, schemeKey, groupBin, nameBin, versBin, fieldsBin);
+            Bin groupBin = new Bin("group", scheme.getGroup());
+            Bin nameBin = new Bin("name", schemeName);
+            Bin versBin = new Bin("version", schemeVersion);
+            Bin fieldsBin = new Bin("fields", scheme.getFields());
+
+            addSchemeToGroup(scheme);
+            client.put(policy, schemeKey, groupBin, nameBin, versBin, fieldsBin);
+        }
     }
 
     @Override
-    public Scheme getScheme(String groupName, String name, int version) {
-        Key schemeKey = new Key(DBNAME, "SCHEMA", groupName + name + version);
-
-        Record schemeRecord = client.get(policy, schemeKey);
-
-        final List<Field> fields = (List) schemeRecord.getValue("fields");
-
-        return new Scheme(groupName, name, version, fields);
-    }
-
-//    @Override
-//    public Scheme getScheme(String group, String name) {
-//        return null;
-//    }
-
-
-    @Override
-    public Group getGroupOfScheme(Scheme scheme) {
-        return null;
+    public Scheme getScheme(String groupName, String name, int version) throws DaoException{
+        if (null == groupName && null == name && 0 == version) {
+            throw new DaoException("Empty query");
+        }
+        else {
+            Key schemeKey = new Key(DBNAME, "SCHEMA", groupName + name + version);
+            Record schemeRecord = client.get(policy, schemeKey);
+            List<Field> fields = (List) schemeRecord.getValue("fields");
+            return new Scheme(groupName, name, version, fields);
+        }
     }
 
     @Override
-    public Group getGroupOfScheme(String groupName) {
-
-        Key schemeKey = new Key(DBNAME, "GROUPS", groupName);
-
-        Record groupRecord = client.get(policy, schemeKey);
-
-        final List<Scheme> schema = (List) groupRecord.getValue("schema");
-
-        return new Group(groupName, schema);
+    public Group getGroupOfScheme(String groupName) throws DaoException{
+        if (null == groupName) {
+            throw new DaoException("Empty query");
+        }
+        else {
+            Key schemeKey = new Key(DBNAME, "GROUPS", groupName);
+            Record groupRecord = client.get(policy, schemeKey);
+            final List<Scheme> schema = (List) groupRecord.getValue("schema");
+            return new Group(groupName, schema);
+        }
     }
 
     @Override
     public void deleteScheme(Scheme scheme) {
-        String schemeGroup = null;
-        String schemeName = null;
-        int schemeVersion = 0;
+        if (null == scheme.getGroup() && null == scheme.getName() && null == scheme.getFields()) {
+        } else {
+            String schemeGroup = scheme.getGroup();
+            String schemeName = scheme.getName();
+            int schemeVersion = scheme.getVersion();
 
-        if (null != scheme.getGroup() && null != scheme.getName() && null != scheme.getFields()) {
-            schemeGroup = scheme.getGroup();
-            schemeName = scheme.getName();
-            schemeVersion = scheme.getVersion();
+            Key schemeKey = new Key(DBNAME, "SCHEMA", schemeGroup + schemeName + schemeVersion);
+
+            deleteSchemeFromGroup(scheme);
+            client.delete(policy, schemeKey);
         }
-        Key schemeKey = new Key(DBNAME, "SCHEMA", schemeGroup + schemeName + schemeVersion);
-
-        deleteSchemeFromGroup(scheme);
-        client.delete(policy, schemeKey);
-    }
-
-    public void deleteScheme(String group, String name, int version) {
-
-        Key schemeKey = new Key(DBNAME, "SCHEMA", group + name + version);
-
-        client.delete(policy, schemeKey);
     }
 
     private void addSchemeToGroup(Scheme scheme){
@@ -118,8 +101,8 @@ public class DAOAerospikeClient implements DAOClient {
             List<Scheme> schema = (ArrayList) groupRecord.getValue("schema");
             if (!schema.contains(scheme)) {
                 schema.add(schema.size(), scheme);
+                client.put(policy, groupKey, new Bin("schema", schema));
             }
-            client.put(policy, groupKey, new Bin("schema", schema));
         }
         else {
             List<Scheme> schema = new ArrayList<>();
@@ -136,16 +119,11 @@ public class DAOAerospikeClient implements DAOClient {
 
         if (client.exists(policy, groupKey)){
             Record groupRecord = client.get(policy, groupKey);
-            List<Scheme> schema = (ArrayList) groupRecord.getValue("schema");
+            ArrayList<Scheme> schema = (ArrayList) groupRecord.getValue("schema");
             schema.remove(scheme);
             client.put(policy, groupKey, new Bin("schema", schema));
         }
-        else {
-            System.out.println("ads");
-            //todo exception
-        }
-
-        //TODO castClass
+              //TODO castClass
 
     }
 }
