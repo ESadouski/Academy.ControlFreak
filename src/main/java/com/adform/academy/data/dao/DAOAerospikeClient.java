@@ -7,6 +7,7 @@ import com.adform.academy.data.entity.Scheme;
 import com.aerospike.client.*;
 import com.aerospike.client.policy.WritePolicy;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class DAOAerospikeClient implements DAOClient {
         int schemeVersion = 0;
 
         if (null != scheme.getGroup() && null != scheme.getName() && null != scheme.getFields()) {
-            schemeGroup = scheme.getGroup().getName();
+            schemeGroup = scheme.getGroup();
             schemeName = scheme.getName();
             schemeVersion = scheme.getVersion();
         }
@@ -45,11 +46,10 @@ public class DAOAerospikeClient implements DAOClient {
         Bin groupBin = new Bin("group", scheme.getGroup());
         Bin nameBin = new Bin("name", schemeName);
         Bin versBin = new Bin("version", schemeVersion);
-        Bin listBin = new Bin("fields", scheme.getFields());
-
-        client.put(policy, schemeKey, groupBin, nameBin, versBin, listBin);
+        Bin fieldsBin = new Bin("fields", scheme.getFields());
 
         addSchemeToGroup(scheme);
+        client.put(policy, schemeKey, groupBin, nameBin, versBin, fieldsBin);
     }
 
     @Override
@@ -58,21 +58,9 @@ public class DAOAerospikeClient implements DAOClient {
 
         Record schemeRecord = client.get(policy, schemeKey);
 
-        String adad = schemeRecord.getString("name");
-        Group group = (Group) schemeRecord.getValue("group");
-        List<Field> fields = (List) schemeRecord.getValue("fields");
+        final List<Field> fields = (List) schemeRecord.getValue("fields");
 
-
-//        int schemeFieldCount = schemeRecord.getInt("fieldcount");
-//
-//        Field[] fields = new Field[schemeFieldCount];
-//
-//        for (int fieldIndex = 0; fieldIndex < schemeFieldCount; fieldIndex++) {
-//            Key fieldKey = new Key(DBNAME, name, fieldIndex);
-//            Record fieldRecord = client.get(policy, fieldKey);
-//            fields[fieldIndex] = new Field(fieldRecord.getString("name"), fieldRecord.getString("pattern"));
-//        }
-        return new Scheme(group, name, version, fields);
+        return new Scheme(groupName, name, version, fields);
     }
 
 //    @Override
@@ -88,42 +76,76 @@ public class DAOAerospikeClient implements DAOClient {
 
     @Override
     public Group getGroupOfScheme(String groupName) {
-            final  List <Scheme> schemes = new LinkedList<>();
 
-            client.scanAll(null, DBNAME, groupName, new ScanCallback() {
-                @Override
-                public void scanCallback(Key key, Record record) throws AerospikeException {
-                    String schemeName = record.getString("name");
-                    Double schemeVersion = record.getDouble("version");
-                    int schemeFieldCount = record.getInt("fieldcount");
+        Key schemeKey = new Key(DBNAME, "GROUPS", groupName);
 
-                    Field[] fields = new Field[schemeFieldCount];
+        Record groupRecord = client.get(policy, schemeKey);
 
-                    for (int fieldIndex = 0; fieldIndex < schemeFieldCount; fieldIndex++) {
-                        Key fieldKey = new Key(DBNAME, schemeName, fieldIndex);
-                        Record fieldRecord = client.get(policy, fieldKey);
-                        fields[fieldIndex] = new Field(fieldRecord.getString("name"), fieldRecord.getString("pattern"));
-                    }
-//                    schemes.add(new Scheme(schemeName, schemeVersion, fields));
-                }
-            });
-        return new Group(groupName, schemes);
-    }
+        final List<Scheme> schema = (List) groupRecord.getValue("schema");
 
-    @Override
-    public void updateScheme(Scheme scheme) {
+        return new Group(groupName, schema);
     }
 
     @Override
     public void deleteScheme(Scheme scheme) {
+        String schemeGroup = null;
+        String schemeName = null;
+        int schemeVersion = 0;
+
+        if (null != scheme.getGroup() && null != scheme.getName() && null != scheme.getFields()) {
+            schemeGroup = scheme.getGroup();
+            schemeName = scheme.getName();
+            schemeVersion = scheme.getVersion();
+        }
+        Key schemeKey = new Key(DBNAME, "SCHEMA", schemeGroup + schemeName + schemeVersion);
+
+        deleteSchemeFromGroup(scheme);
+        client.delete(policy, schemeKey);
+    }
+
+    public void deleteScheme(String group, String name, int version) {
+
+        Key schemeKey = new Key(DBNAME, "SCHEMA", group + name + version);
+
+        client.delete(policy, schemeKey);
     }
 
     private void addSchemeToGroup(Scheme scheme){
-        Key groupKey = new Key(DBNAME, "GROUPS", scheme.getGroup().getName());
-        Group group = scheme.getGroup();
-        group.addScheme(scheme);
-        Bin nameBin = new Bin("name", group.getName());
-        Bin schemaBin = new Bin("schema", group.getList());
-        client.put(policy, groupKey, nameBin, schemaBin);
+        Key groupKey = new Key(DBNAME, "GROUPS", scheme.getGroup());
+
+        if (client.exists(policy, groupKey)){
+            Record groupRecord = client.get(policy, groupKey);
+            List<Scheme> schema = (ArrayList) groupRecord.getValue("schema");
+            if (!schema.contains(scheme)) {
+                schema.add(schema.size(), scheme);
+            }
+            client.put(policy, groupKey, new Bin("schema", schema));
+        }
+        else {
+            List<Scheme> schema = new ArrayList<>();
+            schema.add(schema.size(), scheme);
+            client.put(policy, groupKey, new Bin("name", scheme.getGroup()), new Bin("schema", schema));
+        }
+
+        //TODO castClass
+
+    }
+
+    private void deleteSchemeFromGroup(Scheme scheme){
+        Key groupKey = new Key(DBNAME, "GROUPS", scheme.getGroup());
+
+        if (client.exists(policy, groupKey)){
+            Record groupRecord = client.get(policy, groupKey);
+            List<Scheme> schema = (ArrayList) groupRecord.getValue("schema");
+            schema.remove(scheme);
+            client.put(policy, groupKey, new Bin("schema", schema));
+        }
+        else {
+            System.out.println("ads");
+            //todo exception
+        }
+
+        //TODO castClass
+
     }
 }

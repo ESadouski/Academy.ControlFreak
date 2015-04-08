@@ -9,6 +9,7 @@ import com.adform.academy.data.entity.Group;
 import com.adform.academy.data.entity.Scheme;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,8 +17,6 @@ public class Main {
     public static void main(String[] args) throws DaoException {
         DAOFactory factory = DAOFactory.getInstance();
         DAOClient clientAE = factory.getDAO(DAOClientType.AE);
-
-//        List<Field> fields = {new Field("range", "[a-b]")};
 
         Field field1 = new Field("range", "[a-b]");
         Field field2 = new Field("tel", "[0-9]");
@@ -27,20 +26,28 @@ public class Main {
         list.add(field2);
         list.add(field3);
 
-        Scheme scheme = new Scheme(null, "click", 1);
+        Scheme scheme = new Scheme("advert4", "click2345", 1);
         scheme.setFields(list);
 
         List<Scheme> schemes = new LinkedList<Scheme>();
         schemes.add(schemes.size(), scheme);
 
-        Group group = new Group("advert", schemes);
+//        Group group = new Group("advert", schemes);
 
-        scheme.setGroup(group);
-
+//        scheme.setGroup(group.getName());
+//
+        Group group = clientAE.getGroupOfScheme("advert4");
         clientAE.addScheme(scheme);
 
-        Scheme schemeOut = clientAE.getScheme("advert", "click", 1);
+        Group group1 = clientAE.getGroupOfScheme("advert4");
+        clientAE.deleteScheme(scheme);
+
+//        Scheme schemeOut = clientAE.getScheme("advert4", "click23", 1);
+        ;
+
         System.out.println("all right");
+
+        Group group2 = clientAE.getGroupOfScheme("advert4");
 
 //        Scheme schemeOutput = clientAE.getScheme("click", "advertising", 1.0);
 //        clientAE.getGroupOfScheme("New");

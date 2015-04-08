@@ -15,8 +15,6 @@ public interface DAOClient {
 
     public Group getGroupOfScheme(Scheme scheme);
 
-    public void updateScheme(Scheme scheme);
-
     public void deleteScheme(Scheme scheme);
 
 }

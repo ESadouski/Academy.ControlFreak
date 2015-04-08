@@ -5,29 +5,31 @@ import java.util.List;
 
 public class Scheme implements Serializable{
 
-    private Group group;
+    private static final long serialVersionUID = 1L;
+
+    private String group;
     private String name;
     private int version;
     private List<Field> fields;
 
-    public Scheme(Group group, String name, int version) {
+    public Scheme(String group, String name, int version) {
         this.group = group;
         this.name = name;
         this.version = version;
     }
 
-    public Scheme(Group group, String name, int version, List<Field> fields) {
+    public Scheme(String group, String name, int version, List<Field> fields) {
         this.group = group;
         this.name = name;
         this.version = version;
         this.fields = fields;
     }
 
-    public Group getGroup() {
+    public String getGroup() {
         return group;
     }
 
-    public void setGroup(Group group) {
+    public void setGroup(String group) {
         this.group = group;
     }
 
@@ -57,5 +59,41 @@ public class Scheme implements Serializable{
 
     public void setFields(List<Field> fields) {
         this.fields = fields;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (null == o) {
+            return false;
+        }
+        if (getClass() != o.getClass()) {
+            return false;
+        }
+        final Scheme scheme = (Scheme) o;
+        if (!name.equals(scheme.name)) {
+            return false;
+        }
+        if (!group.equals(scheme.group)) {
+            return false;
+        }
+        if (version != scheme.version) {
+            return false;
+        }
+        if (!fields.equals(scheme.fields)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = group.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + version;
+        result = 31 * result + fields.hashCode();
+        return result;
     }
 }
