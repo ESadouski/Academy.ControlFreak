@@ -10,7 +10,6 @@ import com.adform.academy.data.entity.Scheme;
 import com.google.gson.Gson;
 import org.jboss.resteasy.plugins.server.tjws.TJWSEmbeddedJaxrsServer;
 
-
 import javax.ws.rs.*;
 
 @Path("/v1/scheme")
@@ -23,6 +22,7 @@ public class RESTSchemeService {
         try {
             clientDB = DAOFactory.getInstance().getDAO(DAOClientType.AE);
         } catch (DaoException e) {
+            System.out.println("ERROR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             e.printStackTrace();
         }
 
@@ -49,7 +49,8 @@ public class RESTSchemeService {
     @Path("/{group}/{name}/latest")
     public String getLatestScheme(@PathParam("group") String groupName,
                                   @PathParam("name") String schemeName) {
-        return gson.toJson(clientDB.getScheme(groupName, schemeName));
+        return groupName + " " + schemeName;
+        //return gson.toJson(clientDB.getScheme(groupName, schemeName));
     }
 
     @GET
@@ -57,6 +58,7 @@ public class RESTSchemeService {
     @Path("/{group}/")
     public String getAllSchemesInGroup(@PathParam("group") String groupName) {
         Group result = clientDB.getGroupOfScheme(groupName);
+        System.out.println(result);
         return gson.toJson(result);
 
     }

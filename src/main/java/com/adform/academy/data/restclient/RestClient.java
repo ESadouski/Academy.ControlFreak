@@ -26,7 +26,7 @@ public class RestClient {
     private Gson gson = new Gson();
 
 
-    RestClient(String url) {
+    public RestClient(String url) {
         client = new DefaultHttpClient();
         homeUrl = url;
     }
@@ -115,7 +115,3 @@ public class RestClient {
 
 
 }
-
-
-
-

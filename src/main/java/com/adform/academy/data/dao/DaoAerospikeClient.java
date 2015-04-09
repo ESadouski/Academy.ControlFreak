@@ -7,6 +7,7 @@ import com.aerospike.client.*;
 import com.aerospike.client.policy.WritePolicy;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,24 +15,29 @@ import java.util.Properties;
 
 public class DaoAerospikeClient implements DAOClient {
 
-    private static final String URI = "src/main/resources/config.properties";
+    private static final String URI = "/home/alex/adform/Academy.ControlFreak/src/main/resources/config.properties";
+    //private static final String URI = "src/main/resources/config.properties";
 
-    private static String host;
-    private static int port;
-    private static String dataBaseName;
+    private static String HOST;
+    private static int PORT;
+    private static String DATA_BASE_NAME;
     private static WritePolicy policy = new WritePolicy();
 
     private static DaoAerospikeClient instance;
 
-    private AerospikeClient client = new AerospikeClient(host, port);
+    private AerospikeClient client;
 
     private DaoAerospikeClient() throws DaoException {
         Properties property = new Properties();
         try(FileInputStream fileInputStream = new FileInputStream(URI)) {
             property.load(fileInputStream);
-            host = property.getProperty("db.host");
-            port = Integer.parseInt(property.getProperty("db.port"));
-            dataBaseName = property.getProperty("db.name");
+            HOST = property.getProperty("db.host");
+            PORT = Integer.parseInt(property.getProperty("db.port"));
+            DATA_BASE_NAME = property.getProperty("db.name");
+            client = new AerospikeClient(HOST, PORT);
+
+        } catch (FileNotFoundException e) {
+            throw new DaoException("Cant find property file", e);
         } catch (IOException e) {
             throw new DaoException("Cant read property file", e);
         }
@@ -53,7 +59,7 @@ public class DaoAerospikeClient implements DAOClient {
             schemeVersion = scheme.getVersion();
             schemeFieldCount = scheme.getFields().length;
         }
-        Key schemeKey = new Key(dataBaseName, group, schemeName + schemeVersion);
+        Key schemeKey = new Key(DATA_BASE_NAME, group, schemeName + schemeVersion);
 
         Bin nameBin = new Bin("name", schemeName);
         Bin versBin = new Bin("version", schemeVersion);
@@ -64,14 +70,14 @@ public class DaoAerospikeClient implements DAOClient {
         for (int fieldIndex = 0; fieldIndex < schemeFieldCount; fieldIndex++) {
             Bin fieldBinName = new Bin("name", scheme.getField(fieldIndex).getName());
             Bin fieldBinPattern = new Bin("pattern", scheme.getField(fieldIndex).getPattern());
-            Key fieldKey = new Key(dataBaseName, schemeName, fieldIndex);
+            Key fieldKey = new Key(DATA_BASE_NAME, schemeName, fieldIndex);
             client.put(policy, fieldKey, fieldBinName, fieldBinPattern);
         }
     }
 
     @Override
     public Scheme getScheme(String group, String name, int version) {
-        Key schemeKey = new Key(dataBaseName, group, name + version);
+        Key schemeKey = new Key(DATA_BASE_NAME, group, name + version);
 
         Record schemeRecord = client.get(policy, schemeKey);
 
@@ -80,7 +86,7 @@ public class DaoAerospikeClient implements DAOClient {
         Field[] fields = new Field[schemeFieldCount];
 
         for (int fieldIndex = 0; fieldIndex < schemeFieldCount; fieldIndex++) {
-            Key fieldKey = new Key(dataBaseName, name, fieldIndex);
+            Key fieldKey = new Key(DATA_BASE_NAME, name, fieldIndex);
             Record fieldRecord = client.get(policy, fieldKey);
             fields[fieldIndex] = new Field(fieldRecord.getString("name"), fieldRecord.getString("pattern"));
         }
@@ -96,7 +102,7 @@ public class DaoAerospikeClient implements DAOClient {
     public Group getGroupOfScheme(String groupName) {
             final  List <Scheme> schemes = new LinkedList<>();
 
-            client.scanAll(null, dataBaseName, groupName, new ScanCallback() {
+            client.scanAll(null, DATA_BASE_NAME, groupName, new ScanCallback() {
                 @Override
                 public void scanCallback(Key key, Record record) throws AerospikeException {
                     String schemeName = record.getString("name");
@@ -106,7 +112,7 @@ public class DaoAerospikeClient implements DAOClient {
                     Field[] fields = new Field[schemeFieldCount];
 
                     for (int fieldIndex = 0; fieldIndex < schemeFieldCount; fieldIndex++) {
-                        Key fieldKey = new Key(dataBaseName, schemeName, fieldIndex);
+                        Key fieldKey = new Key(DATA_BASE_NAME, schemeName, fieldIndex);
                         Record fieldRecord = client.get(policy, fieldKey);
                         fields[fieldIndex] = new Field(fieldRecord.getString("name"), fieldRecord.getString("pattern"));
                     }
