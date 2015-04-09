@@ -8,7 +8,6 @@ import com.aerospike.client.*;
 import com.aerospike.client.policy.WritePolicy;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class DAOAerospikeClient implements DAOClient {
@@ -59,9 +58,12 @@ public class DAOAerospikeClient implements DAOClient {
         }
         else {
             Key schemeKey = new Key(DBNAME, "SCHEMA", groupName + name + version);
-            Record schemeRecord = client.get(policy, schemeKey);
-            List<Field> fields = (List) schemeRecord.getValue("fields");
-            return new Scheme(groupName, name, version, fields);
+            if (client.exists(policy, schemeKey)) {
+                Record schemeRecord = client.get(policy, schemeKey);
+                List<Field> fields = (ArrayList) schemeRecord.getValue("fields");
+                return new Scheme(groupName, name, version, fields);
+            }
+            else throw new DaoException("Scheme does not found");
         }
     }
 
@@ -71,10 +73,13 @@ public class DAOAerospikeClient implements DAOClient {
             throw new DaoException("Empty query");
         }
         else {
-            Key schemeKey = new Key(DBNAME, "GROUPS", groupName);
-            Record groupRecord = client.get(policy, schemeKey);
-            final List<Scheme> schema = (List) groupRecord.getValue("schema");
-            return new Group(groupName, schema);
+            Key groupKey = new Key(DBNAME, "GROUPS", groupName);
+            if (client.exists(policy, groupKey)) {
+                Record groupRecord = client.get(policy, groupKey);
+                List<Scheme> schema = (ArrayList) groupRecord.getValue("schema");
+                return new Group(groupName, schema);
+            }
+            else throw new DaoException("Group does not found");
         }
     }
 
@@ -109,9 +114,6 @@ public class DAOAerospikeClient implements DAOClient {
             schema.add(schema.size(), scheme);
             client.put(policy, groupKey, new Bin("name", scheme.getGroup()), new Bin("schema", schema));
         }
-
-        //TODO castClass
-
     }
 
     private void deleteSchemeFromGroup(Scheme scheme){
@@ -119,11 +121,17 @@ public class DAOAerospikeClient implements DAOClient {
 
         if (client.exists(policy, groupKey)){
             Record groupRecord = client.get(policy, groupKey);
-            ArrayList<Scheme> schema = (ArrayList) groupRecord.getValue("schema");
+            List<Scheme> schema = (ArrayList) groupRecord.getValue("schema");
             schema.remove(scheme);
             client.put(policy, groupKey, new Bin("schema", schema));
         }
-              //TODO castClass
-
     }
+
+
+//    private static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
+//        List<T> r = new ArrayList<T>(c.size());
+//        for(Object o: c)
+//            r.add(clazz.cast(o));
+//        return r;
+//    }
 }

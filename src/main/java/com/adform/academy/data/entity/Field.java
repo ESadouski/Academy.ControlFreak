@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class Field implements Serializable{
 
+    private static final long serialVersionUID = 1;
+
     private String name;
     private String pattern;
 

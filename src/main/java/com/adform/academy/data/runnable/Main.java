@@ -29,27 +29,27 @@ public class Main {
         Scheme scheme = new Scheme("advert4", "click23456", 1);
         scheme.setFields(list);
 
-        List<Scheme> schemes = new LinkedList<Scheme>();
+        List schemes = new LinkedList<Scheme>();
         schemes.add(schemes.size(), scheme);
 
-//        Group group = new Group("advert", schemes);
+        Group group = new Group("advert", schemes);
 
-//        scheme.setGroup(group.getName());
+        scheme.setGroup(group.getName());
 //
 //        Group group = clientAE.getGroupOfScheme("advert4");
         clientAE.addScheme(scheme);
 
-        Group group1 = clientAE.getGroupOfScheme("advert4");
-//        clientAE.deleteScheme(scheme);
+//        Group group1 = clientAE.getGroupOfScheme("advert4");
+        clientAE.deleteScheme(scheme);
 
 //        Scheme schemeOut = clientAE.getScheme("advert4", "click23", 1);
-        ;
+//        ;
 
         System.out.println("all right");
 
-        Group group2 = clientAE.getGroupOfScheme("advert4");
+//        Group group2 = clientAE.getGroupOfScheme("advert4");
 
-//        Scheme schemeOutput = clientAE.getScheme("click", "advertising", 1.0);
+//        Scheme schemeOutput = clientAE.getScheme("click", "advertising", 1);
 //        clientAE.getGroupOfScheme("New");
 //
 //        System.out.println("name : " + schemeOutput.getName() + "\nversion : " + schemeOutput.getVersion()+"\n");
